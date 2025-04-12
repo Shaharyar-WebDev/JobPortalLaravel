@@ -16,7 +16,7 @@
         <h1 class="text-4xl md:text-5xl font-bold mb-6">Discover All Industries</h1>
         <div class="max-w-3xl mx-auto">
             <div class="join w-full">
-                <input type="text" wire:model.live="search" placeholder="Search categories..." class="input input-bordered join-item w-full">
+                <input type="text" wire:model.live.debounce.200ms="search" placeholder="Search categories..." class="input input-bordered join-item w-full">
             </div>
         </div>
     </div>
@@ -24,38 +24,38 @@
 
 <main class="container mx-auto px-4 py-8">
     <!-- Filters -->
-    <form class="mb-12 flex flex-wrap justify-center items-center gap-4">
-        <div class="flex gap-4 p-4 bg-base-200 rounded-box">
+    <div class="w-full mb-12 flex flex-wrap justify-center items-center gap-4">
+        <div class="w-full md:w-auto flex gap-4 p-4 bg-base-200 rounded-box">
                    <!-- Sort By -->
+            <fieldset class="flex-1 w-full flex flex-col md:flex-row md:w-auto gap-1 border-2 border-base-300 rounded-lg pb-2 pl-2 pr-2">
+              <legend class="flex items-center gap-2 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                Sort By
+              </legend>
               <div class="form-control">
                 
-                <select class="select select-bordered"><option>Sort By</option>
-                    
-                    <option>Most Popular</option>
-                    <option>Job Openings</option>
-                    <option>Alphabetical</option>
+                <select wire:model.live.debounce.200ms="sort" class="select select-bordered md:w-[300px]">
+                  <option class="hidden">Sort By</option>
+                  <option value="1">Jobs</option>
+                  <option value="2">Companies</option>
+                  <option value="3">Sub Industries</option>
                 </select>
-            </div>
-              <!-- Sort By -->
+              </div>
+
               <div class="form-control">
-                
-                <select class="select select-bordered">
-                    <option selected="" disabled="">Size</option>
-                    <option>Small (1 - 50)</option>
-                    <option>Medium (51 - 500)</option>
-                    <option>Large (500+)</option>
-                </select>
-            </div>
-            <div class="form-control">
-                <button class="btn btn-primary join-item">
-                    Sort
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
+                <button type="button" wire:click="resetFilters" class="btn btn-primary join-item">
+                  Reset Filters
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
                 </button>
+              </div>
+              
             </div>
+          </fieldset>
             </div>
-            </form>
 
             <div class="w-100 text-center mb-8">
               <span class="text-2xl">{{count($industries)}} Industries Available</span>
@@ -64,58 +64,10 @@
 
         <!-- Categories Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                <!-- Category Card -->
-                {{-- <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-                    <div class="card-body items-center text-center">
-                      <div class="mb-4 text-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                      </div>
-                      <h3 class="card-title mb-2">Software Development</h3>
-                      <p class="text-base-content/70">320+ Jobs Available</p>
-                    </div>
-                  </div>
+                <!-- Category Cards -->
 
-                  <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-                    <div class="card-body items-center text-center">
-                      <div class="mb-4 text-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                      </div>
-                      <h3 class="card-title mb-2">Software Development</h3>
-                      <p class="text-base-content/70">320+ Jobs Available</p>
-                    </div>
-                  </div>
-
-                  <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-                    <div class="card-body items-center text-center">
-                      <div class="mb-4 text-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                      </div>
-                      <h3 class="card-title mb-2">Software Development</h3>
-                      <p class="text-base-content/70">320+ Jobs Available</p>
-                    </div>
-                  </div>
-                  
-                  <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-                    <div class="card-body items-center text-center">
-                      <div class="mb-4 text-primary">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                        </svg>
-                      </div>
-                      <h3 class="card-title mb-2">Software Development</h3>
-                      <p class="text-base-content/70">320+ Jobs Available</p>
-                    </div>
-                  </div> --}}
-
-                  @foreach ($industries as $industry)
-                    
-                  <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
+                  @foreach ($industries as $industry)                    
+                  <div class="group card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
                     <div class="card-body items-center text-center">
                       <div class="mb-4 text-primary">
                         @if(Str::contains($industry->icon, '<svg'))
@@ -123,7 +75,23 @@
                         @endif
                       </div>
                       <h3 class="card-title mb-2">{{$industry->name}}</h3>
-                      {{-- <p class="text-base-content/70">320+ Jobs Available</p> --}}
+                      <div class="flex flex-wrap justify-center items-center gap-2 text-md font-semibold text-base-content/70">
+                        <span>{{$industry->job_posts_count}}+ Open {{Str::plural('Job', $industry->job_posts_count)}}</span>
+                        <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
+                        <span>{{$industry->companies_count}}+  {{Str::plural('Company', $industry->companies_count)}}</span>
+                        <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
+                        <span>{{$industry->sub_industries_count}} Sub-{{Str::plural('Industry', $industry->sub_industries_count)}}</span>
+                      </div>
+                      <div class="mt-3 group-hover:opacity-100 transition-opacity duration-300">
+                        <a wire:navigate href="{{route('jobs',['industry'=>$industry->id])}}">
+                        <button class="btn btn-link btn-xs text-primary p-0 hover:no-underline">
+                          Explore Opportunities
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
+                            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+                          </svg>
+                        </button>
+                      </a>
+                      </div>
                     </div>
                   </div>
 
@@ -131,6 +99,8 @@
 
                 <!-- Add more Category cards -->
             </div>
+            
+            {{$industries->links('pagination::tailwind')}}
 </main>
 
 </div>

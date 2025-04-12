@@ -16,7 +16,7 @@
         <h1 class="text-4xl md:text-5xl font-bold mb-6">Discover Top Companies</h1>
         <div class="max-w-3xl mx-auto">
             <div class="join w-full">
-                <input type="text" wire:model.live="search" placeholder="Search companies..." class="input input-bordered join-item w-full">
+                <input type="text" wire:model.live.debounce.200ms="search" placeholder="Search companies..." class="input select-bordered join-item w-full">
             </div>
         </div>
     </div>
@@ -28,47 +28,68 @@
         <!-- Search Bar -->
         <div class="flex-1">
                                 <form class="flex flex-col md:flex-row gap-4 items-center w-full">
-
-              
+                {{-- location fieldset --}}
+              <fieldset class="flex-1 w-full flex flex-col md:flex-row md:w-auto gap-1 border-2 border-base-300 rounded-lg pb-2 pl-2 pr-2">
+                <legend class="flex items-center gap-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  Location
+                </legend>
+                {{-- city input --}}
+                <div class="flex-1 w-full">
                   <!-- city input -->
-                  <div class="flex-1 w-full">
-                    <div class="flex-1 w-full">
-            
-                        <div class="relative">
-                          <select wire:model.live="city" class="select input-bordered w-full select-md">
-                                        <option disabled selected="">Select City</option>
-                                        @foreach ($cities as $city)
-                                        <option value="{{$city->id}}">{{$city->name}}</option>
-                                        @endforeach
-                                      </select>
-                          
-                        </div>
-                </div>
+              
+                  <div class="relative">
+              
+              
+                    <select id="citySelect" wire:model.live.debounce.200ms="city" class="select select-bordered w-full select-md">
+                      <option class="hidden">Select City</option>
+                      @foreach ($cities as $city)
+              <option value="{{$city->id}}">{{$city->name}}</option>
+            @endforeach
+                    </select>
+              
                   </div>
+                </div>
+              
+                {{-- city area input --}}
+                <div class="flex-1 w-full">
+              
+                  <div class="relative">
+                    <select wire:model.live.debounce.200ms="city_area" class="select select-bordered w-full select-md">
+                      @if (!$city_areas)
+              <option class="hidden">Please Select City</option>
+            @else
+          <option class="hidden">Select City Area</option>
+          @foreach ($city_areas as $area)
+        <option value="{{$area->id}}">{{$area->name}}</option>
+      @endforeach
+        @endif
+                    </select>
+              
+                  </div>
+                </div>
+              
+              </fieldset>
 
-                  {{-- city area input --}}
-                  <div class="flex-1 w-full">
-            
-                    <div class="relative">
-                      <select wire:model.live="city_area" class="select input-bordered w-full select-md">
-                        @if (!$city_areas)
-                        <option disabled selected>Please Select City</option>
-                        @else
-                        <option disabled selected>Select City Area</option>
-                        @foreach ($city_areas as $area)
-                        <option value="{{$area->id}}">{{$area->name}}</option>
-                        @endforeach
-                        @endif      
-                       </select>
-                      
-                    </div>
-            </div>
-
+              {{-- industry fieldset --}}
+              <fieldset class="flex-1 w-full flex flex-col md:flex-row md:w-auto gap-1 border-2 border-base-300 rounded-lg pb-2 pl-2 pr-2">
+                <legend class="flex items-center gap-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                  </svg>
+                  Industry
+                </legend>
+            {{-- industry input --}}
                   <div class="flex-1 w-full">
             
                             <div class="relative">
-                              <select wire:model.live="industry" class="select input-bordered w-full select-md">
-                                            <option disabled="" selected="">Select Industry</option>
+                              <select wire:model.live.debounce.200ms="industry" class="select select-bordered w-full select-md">
+                                            <option class="hidden">Select Industry</option>
                                             @foreach ($industries as $industry)
                                             <option value="{{$industry->id}}">{{$industry->name}}</option>
                                             @endforeach
@@ -76,13 +97,37 @@
                               
                             </div>
                     </div>
+
+                    <div class="flex-1 w-full">
             
+                      <div class="relative">
+                        <select wire:model.live.debounce.200ms="sub_industry" class="select select-bordered w-full select-md">
+                                      <option class="hidden">Select Sub Industry</option>
+                                      @foreach ($sub_industries as $sub_industry)
+                                      <option value="{{$sub_industry->id}}">{{$sub_industry->name}}</option>
+                                      @endforeach
+                                    </select>
+                        
+                      </div>
+              </div>
+              
+              </fieldset>
+
+              {{-- Sort fieldset --}}
+              <fieldset class="flex-1 w-full flex flex-col md:flex-row md:w-auto gap-1 border-2 border-base-300 rounded-lg pb-2 pl-2 pr-2">
+                <legend class="flex items-center gap-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  Sort By
+                </legend>
+
                           {{-- Company Size Filter --}}
                           <div class="flex-1 w-full">
             
                             <div class="relative">
-                              <select wire:model.live="company_size" class="select input-bordered w-full select-md">
-                                            <option disabled="" selected="">Company Size</option>
+                              <select wire:model.live.debounce.200ms="company_size" class="select select-bordered w-full select-md">
+                                            <option class="hidden">Company Size</option>
                                             <option value="1-50">Small (1 - 50)</option>
                                             <option value="51-500">Medium (51 - 500) </option>
                                             <option value="500+">Large (500+)</option>
@@ -91,12 +136,12 @@
                             </div>
                           </div>
 
-                                 <!-- Sort By -->
+                                 <!-- Order By -->
                   <div class="flex-1 w-full">
             
                     <div class="relative">
-                      <select wire:model.live="sort" class="select input-bordered w-full select-md">
-                                    <option disabled="" selected="">Sort By</option>
+                      <select wire:model.live.debounce.200ms="sort" class="select select-bordered w-full select-md">
+                                    <option class="hidden">Order By</option>
                                     <option value="1">Date</option>
                                     <option value="2">Alphabetical</option>
                                     {{-- <option value="3">Job Openings</option> --}}
@@ -104,11 +149,12 @@
                       
                     </div>
                   </div>
-              
 
-                  <!-- Search Button -->
+              </fieldset>
+
+                  <!-- Reset Button -->
                   <div class="w-full md:w-auto">
-                    <button type="button" wire:click="resetFilters" class="btn btn-primary btn-md w-full md:auto  min-w-40 flex justify-center items-center gap-2">
+                    <button type="button" wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto  min-w-40 flex justify-center items-center gap-2">
                       Reset Filters
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -117,33 +163,49 @@
                     </button>
                   </div>
                 </form>
-        </div>
-
-        <!-- Sort Dropdown -->
-        
+        </div>        
     </div>
   
     <div class="w-100 text-center mt-12 mb-8">
-        <span class="text-2xl">{{count($companies)}} Companies Available</span>
+        <span class="text-2xl">{{$num_of_comp}} Companies Available</span>
     </div>
-
-    <!-- <div class="flex flex-col lg:flex-row gap-8"> -->
-        <!-- Companies Grid -->
-        <!-- <div class="flex-1"> -->
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Company Card -->
                 @foreach ($companies as $company)
                 <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
                     <div class="card-body items-center text-center">
                       <!-- Company Logo -->
+                      @if($company->image && Storage::disk('public')->exists('/images/'.$company->image))
+                      <img loading="lazy" src="{{asset('storage/images/'.$company->image)}}" class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
+                      </img>
+                      @else
                       <div class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
-                        <span class="text-2xl font-bold text-primary">Logo</span>
+                        <span class="text-2xl font-bold text-primary">  
+                         
+                        @php
+                        $name = explode(' ',$company->name);
+                        $initials = '';
+                        foreach($name as $initial){
+                          $initials.= substr($initial, 0, 1);
+                        }
+                        @endphp
+                       {{$initials}}
+                        </span>
                       </div>
+                    
+                      @endif
                       
-                      <h3 class="card-title mb-2">{{$company->name}}</h3>
+                      <h3 class="card-title mb-2"><a class="hover:underline" wire:navigate href="{{route('company.view', [
+                      'id'=>$company->id,'slug'=>App\Helpers\MyFunc::sexySlug($company->name, time : false)])}}">{{$company->name}}</a></h3>
                       <p class="text-sm text-base-content/70 mb-4">{{$company->industry->name}}</p>
 
-                      <p class="text-sm text-base-content/70 mb-4">{{$company->city->name}} || {{$company->city_area->name}}</p>
+                      <p class="text-sm text-base-content/70 mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                      </svg>
+                      {{$company->city->name}} ,{{$company->city_area->name}}</p>
+
+                      <p class="text-sm text-base-content/70 mb-4">Company Size: {{$company->company_size}} employees</p>
           
                       <div class="rating rating-md mb-6">
                           <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="1 star">
@@ -154,55 +216,25 @@
                       </div>
                       
                       <div class="badge badge-primary badge-lg mb-4">
-                        24 Jobs Available
+                        {{$company->job_posts_count}} {{Str::plural('Job', $company->job_posts_count)}} Available
                       </div>
                       
+                      <a wire:navigate href="{{route('jobs', ['company'=>$company->id])}}">
                       <button class="btn btn-outline btn-primary btn-sm gap-2">
                         View Jobs
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
                       </button>
+                    </a>
                     </div>
                   </div>
                 @endforeach
-                {{-- <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-                    <div class="card-body items-center text-center">
-                      <!-- Company Logo -->
-                      <div class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
-                        <span class="text-2xl font-bold text-primary">TL</span>
-                      </div>
-                      
-                      <h3 class="card-title mb-2">Tech Leaders</h3>
-                      <p class="text-sm text-base-content/70 mb-4">Information Technology</p>
-          
-                      <div class="rating rating-md mb-6">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="1 star">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="2 star" checked="checked">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="3 star">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="4 star">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="5 star">
-                      </div>
-                      
-                      <div class="badge badge-primary badge-lg mb-4">
-                        24 Jobs Available
-                      </div>
-                      
-                      <button class="btn btn-outline btn-primary btn-sm gap-2">
-                        View Jobs
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
-                      </button>
-                    </div>
-                  </div> --}}
 
-                <!-- Add more company cards -->
             </div>
 
-            {{$companies->links()}}
-        <!-- </div> -->
-    <!-- </div> -->
+            {{$companies->links('pagination::tailwind')}}
+  
 </main>
 
 </div>

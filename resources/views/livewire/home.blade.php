@@ -18,64 +18,69 @@
     </p>
 
    <!-- Search Form -->
-<div class="bg-base-200 rounded-box p-4 shadow-lg mb-8">
-<form class="flex flex-col md:flex-row gap-4 items-center w-full">
-  <!-- Job Title Input -->
-  <div class="flex-1 w-full">
-    <!-- <label class="label" for="job-title">
-      <span class="label-text">What</span>
-    </label> -->
-    <div class="relative">
-      <input type="text" id="job-title" name="job-title" placeholder="Job title or keywords" class="input input-bordered input-lg w-full pr-12" required="">
-      <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-      </span>
+   <div class="bg-base-200 rounded-box p-4 shadow-lg mb-8">
+    <form wire:submit.prevent="goToJobs" class="flex flex-col md:flex-row gap-4 items-center w-full">
+      <!-- Job Title Input -->
+      <div class="flex-1 w-full">
+        <div class="relative">
+          <input type="text" id="job-title" wire:model="search" placeholder="Job title or keywords" class="input input-bordered input-lg w-full pr-12" required="">
+          <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
+    
+      <!-- Location Select -->
+      <div class="flex-1 w-full">
+        <div class="relative">
+          <select id="location" wire:model="city" class="select input-bordered w-full select-lg pr-12" required="">
+            <option class="hidden">Select a City</option>
+            @foreach ($cities as $city)
+              <option value="{{$city->id}}">{{$city->name}}</option>
+            @endforeach
+          </select>
+          <span class="absolute right-8 top-1/2 transform -translate-y-1/2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
+    
+      <!-- Category Select -->
+      <div class="flex-1 w-full">
+        <div class="relative">
+          <select wire:model="industry" class="select input-bordered w-full select-lg">
+            <option class="hidden">Pick a Industry</option>
+            @foreach ($industries as $industry)
+              <option value="{{$industry->id}}">{{$industry->name}}</option>
+            @endforeach
+          </select>
+    <span class="absolute right-8 top-1/2 transform -translate-y-1/2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z"></path>
+    </svg>
+    
+          </span>
+        </div>
+      </div>
+    
+      <!-- Search Button -->
+      <div class="w-full md:w-auto">
+        {{-- <a wire:submit="{{route('jobs')}}"> --}}
+        <button type="submit" class="btn btn-primary btn-lg w-full md:w-40 h-16 flex justify-center items-center gap-2">
+          Search
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </button>
+      {{-- </a> --}}
+      </div>
+    </form>
     </div>
-  </div>
-
-  <!-- Location Input -->
-  <div class="flex-1 w-full">
-    <!-- <label class="label" for="location">
-      <span class="label-text">Where</span>
-    </label> -->
-    <div class="relative">
-      <input type="text" id="location" name="location" placeholder="Location" class="input input-bordered input-lg w-full pr-12" required="">
-      <span class="absolute right-4 top-1/2 transform -translate-y-1/2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-      </span>
-    </div>
-  </div>
-
-  <!-- Category Select -->
-  <div class="flex-1 w-full">
-
-    <div class="relative">
-      <select class="select input-bordered w-full select-lg">
-                    <option disabled="" selected="">Pick a Category</option>
-                    <option>It</option>
-                    <option>Construction</option>
-                    <option>Web</option>
-                  </select>
-      
-    </div>
-  </div>
-
-  <!-- Search Button -->
-  <div class="w-full md:w-auto">
-    <button type="submit" class="btn btn-primary btn-lg w-full md:w-40 h-16 flex justify-center items-center gap-2">
-      Search
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-      </svg>
-    </button>
-  </div>
-</form>
-</div>
 
     <!-- Recruiter CTA -->
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -126,67 +131,49 @@
 
   <!-- Categories Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <!-- Category Card 1 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div class="card-body items-center text-center">
-        <div class="mb-4 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-          </svg>
-        </div>
-        <h3 class="card-title mb-2">Software Development</h3>
-        <p class="text-base-content/70">320+ Jobs Available</p>
-      </div>
-    </div>
+       <!-- Category Card 1 -->
 
-    <!-- Category Card 2 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
+    @foreach ($industries as $industry)                    
+    <div class="group card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
       <div class="card-body items-center text-center">
         <div class="mb-4 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-          </svg>
+          @if(Str::contains($industry->icon, '<svg'))
+          {!!$industry->icon!!}
+          @endif
         </div>
-        <h3 class="card-title mb-2">Marketing</h3>
-        <p class="text-base-content/70">245+ Jobs Available</p>
+        <h3 class="card-title mb-2">{{$industry->name}}</h3>
+        <div class="flex flex-wrap justify-center items-center gap-2 text-md font-semibold text-base-content/70">
+          <span>{{$industry->job_posts_count}}+ Open {{Str::plural('Job', $industry->job_posts_count)}}</span>
+          <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
+          <span>{{$industry->companies_count}}+  {{Str::plural('Company', $industry->companies_count)}}</span>
+          <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
+          <span>{{$industry->sub_industries_count}} Sub-{{Str::plural('Industry', $industry->sub_industries_count)}}</span>
+        </div>
+        <div class="mt-3 group-hover:opacity-100 transition-opacity duration-300">
+          <a wire:navigate href="{{route('jobs',['industry'=>$industry->id])}}">
+          <button class="btn btn-link btn-xs text-primary p-0 hover:no-underline">
+            Explore Opportunities
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
+              <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </a>
+        </div>
       </div>
     </div>
-
-    <!-- Category Card 3 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div class="card-body items-center text-center">
-        <div class="mb-4 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <h3 class="card-title mb-2">Finance</h3>
-        <p class="text-base-content/70">189+ Jobs Available</p>
-      </div>
-    </div>
-
-    <!-- Category Card 4 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div class="card-body items-center text-center">
-        <div class="mb-4 text-primary">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-          </svg>
-        </div>
-        <h3 class="card-title mb-2">Design</h3>
-        <p class="text-base-content/70">156+ Jobs Available</p>
-      </div>
-    </div>
+    @endforeach
   </div>
 
   <!-- View All Button -->
   <div class="text-center">
+    <a wire:navigate href="{{route('industries')}}">
     <button class="btn btn-outline btn-primary px-8">
-      View All Categories
+      View All Industries
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
       </svg>
     </button>
+  </a>
   </div>
 </div>
 </section>
@@ -205,139 +192,97 @@
     </p>
   </div>
 
-  <!-- Filters -->
-  {{-- <div class="flex flex-wrap gap-4 mb-8 justify-center">
-    <div class="dropdown dropdown-bottom">
-      <div tabindex="0" role="button" class="btn btn-outline btn-sm">
-        Location
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
-      </div>
-      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-        <li><a>Remote</a></li>
-        <li><a>On-site</a></li>
-        <li><a>Hybrid</a></li>
-      </ul>
-    </div>
-
-    <div class="dropdown dropdown-bottom">
-      <div tabindex="0" role="button" class="btn btn-outline btn-sm">
-        Job Type
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
-      </div>
-      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-        <li><a>Full-time</a></li>
-        <li><a>Part-time</a></li>
-        <li><a>Contract</a></li>
-      </ul>
-    </div>
-
-    <div class="dropdown dropdown-bottom">
-      <div tabindex="0" role="button" class="btn btn-outline btn-sm">
-        Salary Range
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-        </svg>
-      </div>
-      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-        <li><a>$50k+</a></li>
-        <li><a>$80k+</a></li>
-        <li><a>$100k+</a></li>
-      </ul>
-    </div>
-  </div> --}}
-
   <!-- Jobs Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <!-- Job Card 1 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-        <div class="card-body">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 rounded-box bg-primary/10 flex items-center justify-center">
-              <div class="text-primary font-bold">TL</div>
-            </div>
-            <div class="flex items-center gap-2">
-          <!-- "New" Badge for urgency -->
-          <span class="badge badge-primary badge-sm">New</span>
-          <!-- Favorite Button -->
-          <button class="btn btn-ghost btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-            </svg>
-          </button>
-        </div>
-          </div>
-          
-          <h3 class="card-title mb-2">Senior Frontend Developer</h3>
-          <div class="text-sm text-base-content/70 mb-4">
-            <p>Tech Leaders Inc.</p>
-            <p>Remote • $90k - $120k</p>
-          </div>
-          
-          <div class="flex flex-wrap gap-2 mb-6">
-            <span class="badge badge-outline">Full-time</span>
-            <span class="badge badge-outline">Remote</span>
-            <span class="badge badge-outline">React</span>
-          </div>
-          
-          <div class="card-actions">
-            <button class="btn btn-primary btn-block">
-              Apply Now
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-    <!-- Job Card 2 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-      <div class="card-body">
-        <div class="flex items-start justify-between mb-4">
-          <div class="w-12 h-12 rounded-box bg-secondary/10 flex items-center justify-center">
-            <div class="text-secondary font-bold">DC</div>
-          </div>
-          <span class="badge badge-secondary badge-sm">Hot</span>
-        </div>
-        
-        <h3 class="card-title mb-2">Product Manager</h3>
-        <div class="text-sm text-base-content/70 mb-4">
-          <p>Digital Creations</p>
-          <p>New York • $110k - $150k</p>
-        </div>
-        
-        <div class="flex flex-wrap gap-2 mb-6">
-          <span class="badge badge-outline">Full-time</span>
-          <span class="badge badge-outline">On-site</span>
-          <span class="badge badge-outline">Product</span>
-        </div>
-        
-        <div class="card-actions">
-          <button class="btn btn-primary btn-block">
-            Apply Now
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add more job cards following the same structure -->
+    @foreach ($jobs as $job)
+                <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
+                  <div class="card-body">
+                    <div class="flex items-start justify-between mb-4">
+                      <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
+                        @if($job->company->image && Storage::disk('public')->exists('/images/'.$job->company->image))
+                        <img src="{{asset('storage/images/'.$job->company->image)}}" alt="">
+                        @else
+                        <div class="text-primary font-bold">
+                         @php
+                          $cname = '';
+                         foreach(explode(' ', $job->company->name) as $name){
+                          $cname.= ucfirst(substr($name,0,1 ));
+                         }
+                         @endphp
+                         {{$cname}}
+                        </div>
+                        @endif
+                      </div>
+                      <div class="flex items-center gap-2">
+                    <!-- "New" Badge for urgency -->
+                    @if ($job->created_at->gt(now()->subDays(7)))
+                    <span class="badge badge-primary badge-sm">New</span>
+                    @endif
+                    
+                    @if($job->urgently_hiring == 1)
+                    <span class="badge badge-error badge-sm w-auto h-auto">Urgently Hiring</span>
+                    @endif
+                    <!-- Favorite Button -->
+                    <button class="btn btn-ghost btn-sm">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                    </div>
+                    
+                    <h3 class="card-title mb-2">{{Str::limit($job->title, 30, '.....')}}</h3>
+                    <div class="text-sm text-base-content/70 mb-4">
+                      <p>{{$job->company->name}} • {{ $job->city_area->name }}, {{ $job->city->name }}</p>
+                      <p class="flex items-center gap-2 font-bold mt-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                        </svg>
+                         Rs {{number_format($job->min_salary)}} - Rs {{number_format($job->max_salary)}}</p>
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2 mb-6">
+                      <span class="badge badge-outline">{{$job->job_type->name}}</span>
+                      <span class="badge badge-outline">{{ucfirst($job->job_setting)}}</span>
+                      @php
+                        $diff = round($job->created_at->diffInDays(now()));
+                      @endphp
+                      @if ($diff == 0)
+                       <span class="badge badge-outline text-xs">
+                        Today
+                       </span>
+                       @else
+                       <span class="badge badge-outline text-xs">
+                      {{$diff}} {{Str::plural('day', $diff)}} ago
+                       </span>
+                      @endif
+                      </div>
+                    <div class="card-actions">
+                      <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
+                      <button class="btn btn-primary btn-block">
+                        Apply Now
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                      </button>
+                    </a>
+                    </div>
+                  </div>
+                </div>
+              
+    @endforeach
   </div>
 
   <!-- View All Button -->
   <div class="text-center">
+    <a wire:navigate href="{{route('jobs')}}">
     <button class="btn btn-outline btn-primary px-8">
       View All Jobs
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
       </svg>
     </button>
+  </a>
   </div>
 </div>
 </section>
@@ -358,116 +303,78 @@
 
   <!-- Companies Grid -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-    <!-- Company Card 1 -->
+    <!-- Company Card -->
+    @foreach ($companies as $company)
     <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-      <div class="card-body items-center text-center">
-        <!-- Company Logo -->
-        <div class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
-          <span class="text-2xl font-bold text-primary">TL</span>
-        </div>
+        <div class="card-body items-center text-center">
+          <!-- Company Logo -->
+          @if($company->image && Storage::disk('public')->exists('/images/'.$company->image))
+          <img loading="lazy" src="{{asset('storage/images/'.$company->image)}}" class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
+          </img>
+          @else
+          <div class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
+            <span class="text-2xl font-bold text-primary">  
+             
+            @php
+            $name = explode(' ',$company->name);
+            $initials = '';
+            foreach($name as $initial){
+              $initials.= substr($initial, 0, 1);
+            }
+            @endphp
+           {{$initials}}
+            </span>
+          </div>
         
-        <h3 class="card-title mb-2">Tech Leaders</h3>
-        <p class="text-sm text-base-content/70 mb-4">Information Technology</p>
+          @endif
+          
+          <h3 class="card-title mb-2"><a class="hover:underline" wire:navigate href="{{route('company.view', [
+          'id'=>$company->id,'slug'=>App\Helpers\MyFunc::sexySlug($company->name, time : false)])}}">{{$company->name}}</a></h3>
+          <p class="text-sm text-base-content/70 mb-4">{{$company->industry->name}}</p>
 
-        <div class="rating rating-md mb-6">
-            <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="1 star">
-            <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="2 star" checked="checked">
-            <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="3 star">
-            <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="4 star">
-            <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="5 star">
-        </div>
-        
-        <div class="badge badge-primary badge-lg mb-4">
-          24 Jobs Available
-        </div>
-        
-        <button class="btn btn-outline btn-primary btn-sm gap-2">
-          View Jobs
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          <p class="text-sm text-base-content/70 mb-4 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
           </svg>
-        </button>
-      </div>
-    </div>
+          {{$company->city->name}} ,{{$company->city_area->name}}</p>
 
-    <!-- Company Card 2 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-      <div class="card-body items-center text-center">
-        <div class="w-20 h-20 rounded-2xl bg-secondary/10 mb-6 flex items-center justify-center">
-          <span class="text-2xl font-bold text-secondary">DC</span>
-        </div>
-        
-        <h3 class="card-title mb-2">Digital Creations</h3>
-        <p class="text-sm text-base-content/70 mb-4">Design &amp; Marketing</p>
-        
-        <div class="badge badge-primary badge-lg mb-4">
-          18 Jobs Available
-        </div>
-        
-        <button class="btn btn-outline btn-primary btn-sm gap-2">
-          View Jobs
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
+          <p class="text-sm text-base-content/70 mb-4">Company Size: {{$company->company_size}} employees</p>
 
-    <!-- Company Card 3 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-      <div class="card-body items-center text-center">
-        <div class="w-20 h-20 rounded-2xl bg-accent/10 mb-6 flex items-center justify-center">
-          <span class="text-2xl font-bold text-accent">FG</span>
+          <div class="rating rating-md mb-6">
+              <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="1 star">
+              <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="2 star" checked="checked">
+              <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="3 star">
+              <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="4 star">
+              <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="5 star">
+          </div>
+          
+          <div class="badge badge-primary badge-lg mb-4">
+            {{$company->job_posts_count}} {{Str::plural('Job', $company->job_posts_count)}} Available
+          </div>
+          
+          <a wire:navigate href="{{route('jobs', ['company'=>$company->id])}}">
+          <button class="btn btn-outline btn-primary btn-sm gap-2">
+            View Jobs
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </button>
+        </a>
         </div>
-        
-        <h3 class="card-title mb-2">FinGrowth</h3>
-        <p class="text-sm text-base-content/70 mb-4">Banking &amp; Finance</p>
-        
-        <div class="badge badge-primary badge-lg mb-4">
-          32 Jobs Available
-        </div>
-        
-        <button class="btn btn-outline btn-primary btn-sm gap-2">
-          View Jobs
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </button>
       </div>
-    </div>
-
-    <!-- Company Card 4 -->
-    <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
-      <div class="card-body items-center text-center">
-        <div class="w-20 h-20 rounded-2xl bg-neutral/10 mb-6 flex items-center justify-center">
-          <span class="text-2xl font-bold text-neutral">HC</span>
-        </div>
-        
-        <h3 class="card-title mb-2">HealthCorp</h3>
-        <p class="text-sm text-base-content/70 mb-4">Healthcare</p>
-        
-        <div class="badge badge-primary badge-lg mb-4">
-          15 Jobs Available
-        </div>
-        
-        <button class="btn btn-outline btn-primary btn-sm gap-2">
-          View Jobs
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
+    @endforeach
   </div>
 
   <!-- View All Button -->
   <div class="text-center">
+    <a wire:navigate href="{{route('companies')}}">
     <button class="btn btn-outline btn-primary px-8">
       View All Companies
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
       </svg>
     </button>
+    </a>
   </div>
 </div>
 </section>

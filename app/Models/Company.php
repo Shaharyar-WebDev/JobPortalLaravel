@@ -24,4 +24,12 @@ class Company extends Model
         return $this->belongsTo(CityArea::class, 'city_area_id');
     }
 
+    public function sub_industry(){
+        return $this->belongsTo(SubIndustry::class, 'sub_industry_id');
+    }
+
+    public function job_posts(){
+        return $this->hasMany(JobPost::class);
+    }
+
 }

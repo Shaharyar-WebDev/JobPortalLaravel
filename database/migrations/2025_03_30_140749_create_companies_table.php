@@ -17,11 +17,12 @@ return new class extends Migration
             $table->string('email', 255);
             $table->string('image', 255)->nullable();
             $table->foreignId('industry_id')->constrained()->onDelete('cascade');
+            $table->foreignId('sub_industry_id')->constrained()->onDelete('cascade');
             $table->enum('company_size', ['1-50', '51-500', '500+'])->nullable();
             $table->bigInteger('valuation')->nullable();
-            $table->string('address', 255);
             $table->foreignId('city_id')->constrained()->onDelete('cascade');
             $table->foreignId('city_area_id')->constrained()->onDelete('cascade');
+            $table->string('address', 255);
             $table->string('website', 255)->nullable();
             $table->text('description');
             $table->timestamps();

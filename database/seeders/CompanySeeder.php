@@ -19,33 +19,40 @@ class CompanySeeder extends Seeder
                 'name' => 'Shaharyar Corporation',
                 'email' => 'shery.codes@gmail.com',
                 'industry_id' => 1,
+                'sub_industry_id' => 6,
                 'company_size' => '1-50',
                 'valuation' => '999000000000',
                 'address' => 'SILICON VALLEY',
                 'city_id' => 1,
                 'city_area_id' => 3,
                 'website' => 'https://test.com',
-                'description' => 'About Us
-Shaharyar Corporation is a leading technology innovator, shaping the future of web development, AI, and cloud computing. Founded with a passion for digital transformation, we empower businesses with cutting-edge software solutions, scalable infrastructures, and next-gen applications.
+                'description' => '<p><strong>About Us</strong></p>
+<p><strong>Shaharyar Corporation</strong> is a leading technology innovator, shaping the future of web development, AI, and cloud computing. Founded with a passion for digital transformation, we empower businesses with cutting-edge software solutions, scalable infrastructures, and next-gen applications.</p>
 
-What We Do
-🔹 Full-Stack Web Solutions – Expertise in Laravel, Livewire, and modern frameworks.
-🔹 AI-Powered Applications – Leveraging artificial intelligence for automation & analytics.
-🔹 Cloud & DevOps – Scalable solutions for enterprises worldwide.
-🔹 Enterprise SaaS Development – Custom software tailored for global businesses.
+<p><strong>What We Do</strong></p>
+<ul>
+  <li>🔹 <strong>Full-Stack Web Solutions</strong> – Expertise in Laravel, Livewire, and modern frameworks.</li>
+  <li>🔹 <strong>AI-Powered Applications</strong> – Leveraging artificial intelligence for automation & analytics.</li>
+  <li>🔹 <strong>Cloud & DevOps</strong> – Scalable solutions for enterprises worldwide.</li>
+  <li>🔹 <strong>Enterprise SaaS Development</strong> – Custom software tailored for global businesses.</li>
+</ul>
 
-Why Choose Us?
-✅ Expert Laravel & Livewire Development – Building dynamic, real-time web apps.
-✅ Agile & Scalable Solutions – We adapt to industry trends and business needs.
-✅ Innovative Tech Culture – Driven by a passion for coding and problem-solving.
-✅ Global Impact – Helping startups and enterprises scale their operations.
+<p><strong>Why Choose Us?</strong></p>
+<ul>
+  <li>✅ <strong>Expert Laravel & Livewire Development</strong> – Building dynamic, real-time web apps.</li>
+  <li>✅ <strong>Agile & Scalable Solutions</strong> – We adapt to industry trends and business needs.</li>
+  <li>✅ <strong>Innovative Tech Culture</strong> – Driven by a passion for coding and problem-solving.</li>
+  <li>✅ <strong>Global Impact</strong> – Helping startups and enterprises scale their operations.</li>
+</ul>
 
-At Shaharyar Corporation, we don’t just build software—we shape the future of digital experiences. 🚀'
+<p>At Shaharyar Corporation, we don’t just build software—we shape the future of digital experiences. 🚀</p>
+'
             ],
             [
                 'name' => 'NovaTech Solutions',
                 'email' => 'contact@novatech.com',
                 'industry_id' => 3,
+                'sub_industry_id' => 8,
                 'company_size' => '51-500',
                 'valuation' => '850000000000',
                 'address' => 'NEW YORK, USA',
@@ -73,6 +80,7 @@ At Shaharyar Corporation, we don’t just build software—we shape the future o
                 'name' => 'Vertex Innovations',
                 'email' => 'info@vertexinnovations.com',
                 'industry_id' => 2,
+                'sub_industry_id' => 9,
                 'company_size' => '500+',
                 'valuation' => '780000000000',
                 'address' => 'LONDON, UK',
