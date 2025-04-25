@@ -28,16 +28,40 @@ class CityAreaSeeder extends Seeder
                 'name' => 'Defence'
             ],
             [
-                'city_id' => 2,
-                'name' => 'Raiwind'
-            ],
-            [
                 'city_id' => 1,
                 'name' => 'Gulshan'
             ],
             [
+                'city_id' => 2,
+                'name' => 'Centauras'
+            ],
+            [
+                'city_id' => 2,
+                'name' => 'Faisal RD'
+            ],
+            [
+                'city_id' => 2,
+                'name' => 'Lal Qila'
+            ],
+            [
+                'city_id' => 2,
+                'name' => 'Badshahi Mosque'
+            ],
+            [
                 'city_id' => 3,
-                'name' => 'Faisal Road'
+                'name' => 'Burger Rd'
+            ],
+            [
+                'city_id' => 3,
+                'name' => 'Astethic Road'
+            ],
+            [
+                'city_id' => 3,
+                'name' => 'Parliament'
+            ],
+            [
+                'city_id' => 3,
+                'name' => 'LaWhore'
             ]
         ]);
 

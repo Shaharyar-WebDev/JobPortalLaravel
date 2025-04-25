@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('name', 255);
             $table->string('email', 255);
             $table->string('image', 255)->nullable();
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->foreignId('city_area_id')->constrained()->onDelete('cascade');
             $table->string('address', 255);
             $table->string('website', 255)->nullable();
+            $table->enum('job_posts_visibility', ['hidden', 'visible'])->default('visible');
             $table->text('description');
             $table->timestamps();
         });

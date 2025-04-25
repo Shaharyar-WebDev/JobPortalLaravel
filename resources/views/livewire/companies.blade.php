@@ -172,16 +172,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 <!-- Company Card -->
                 @foreach ($companies as $company)
-                <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
+                <div class="card bg-base-200 shadow-md hover:shadow-xl  transition-shadow duration-300 group">
                     <div class="card-body items-center text-center">
                       <!-- Company Logo -->
-                      @if($company->image && Storage::disk('public')->exists('/images/'.$company->image))
-                      <img loading="lazy" src="{{asset('storage/images/'.$company->image)}}" class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
+                      @if($company->image && Storage::disk('public')->exists('/images/companies/'.$company->image))
+                      <img loading="lazy" src="{{asset('storage/images/companies/'.$company->image)}}" class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
                       </img>
                       @else
                       <div class="w-20 h-20 rounded-2xl bg-primary/10 mb-6 flex items-center justify-center">
                         <span class="text-2xl font-bold text-primary">  
-                         
                         @php
                         $name = explode(' ',$company->name);
                         $initials = '';
@@ -206,14 +205,6 @@
                       {{$company->city->name}} ,{{$company->city_area->name}}</p>
 
                       <p class="text-sm text-base-content/70 mb-4">Company Size: {{$company->company_size}} employees</p>
-          
-                      <div class="rating rating-md mb-6">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="1 star">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="2 star" checked="checked">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="3 star">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="4 star">
-                          <input type="radio" name="rating-6" class="mask mask-star-2 bg-orange-400" aria-label="5 star">
-                      </div>
                       
                       <div class="badge badge-primary badge-lg mb-4">
                         {{$company->job_posts_count}} {{Str::plural('Job', $company->job_posts_count)}} Available

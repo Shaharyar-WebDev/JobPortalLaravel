@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('company_settings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            // $table->foreignId('job_posting_duration_id')->nullable()->constrained()->onDelete('set null');
-            $table->enum('status', [1,2,3,4])->default(1)->comment('1 = active, 2 = pending review (case), 3 = inactive , 4 = restricted (banned)');
-            $table->tinyInteger('job_posts_visibility')->default(1)->comment('1 visible, 2 hidden');
-            $table->timestamps();
-        });
+        // Schema::create('company_settings', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('company_id')->constrained()->onDelete('cascade');
+        //     // $table->foreignId('job_posting_duration_id')->nullable()->constrained()->onDelete('set null');
+        //     $table->enum('status', [1,2,3,4])->default(1)->comment('1 = active, 2 = pending review (case), 3 = inactive , 4 = restricted (banned)');
+        //     $table->tinyInteger('job_posts_visibility')->default(1)->comment('1 visible, 2 hidden');
+        //     $table->timestamps();
+        // });
     }
 
     /**

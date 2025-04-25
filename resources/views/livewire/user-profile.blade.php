@@ -5,23 +5,88 @@
     <div class="card bg-base-100 shadow-sm mb-8">
         <div class="card-body">
             <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="flex flex-col justify-center items-center gap-3">
                 <div class="avatar">
-                    <div class="w-24 rounded-full bg-primary/10 relative">
-                        <img src="https://dummyimage.com/100x100">
-                        <button class="btn btn-circle btn-sm absolute bottom-0 right-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
+                    <div class="w-24 rounded-xl overflow-hidden">
+                    <label class="cursor-pointer" for="image">
+                        @if($profile_img)
+         <img class="rounded-full !object-cover" src="
+                          @if($errors->any('profile_img'))
+                          https://imageplaceholder.net/600x400
+                          @else
+                          {{$profile_img->temporaryUrl()}}
+                          @endif
+                          "/>        
+                        @else
+                        @php
+                        if(Auth::user()->role == 'user'){
+                            $user = \App\Models\User::find(Auth::id());
+                            $image = $user->image;
+                                $disk = 'users';
+                            }
+                            elseif(Auth::user()->role == 'employer'){
+                                
+                                $image = \App\Models\Company::where('user_id', Auth::id())->first()->image;
+                                $disk = 'companies';
+                            }
+                        @endphp
+                        @if($image && Storage::disk('public')->exists("/images/$disk/".$image))
+                        <img class="text-primary w-full h-[100%] flex justify-center rounded-full items-center" src="{{asset("/storage/images/$disk/".$image)}}">
+                        @else
+                        <span class="bg-primary/10 ring ring-primary/20 text-primary rounded-full w-full h-[100%] flex justify-center items-center">
+                          @php
+                          $initials = "";
+                          $user_name = explode(' ', Auth::user()->name);
+                          foreach($user_name as $name){
+                            $initials.=substr($name, 0, 1);
+                          }
+                          @endphp
+                          {{$initials}}
+                        </span>
+                        @endif
+                        @endif
+                 
+                    </label>
+                        </div>
+                      </div>
+                      @error('profile_img')
+                      <span class="text-error">
+                      {{$message}}
+                      </span>
+                       @enderror
+                      <form wire:submit="updateImage" class="flex flex-row gap-2">
+                        @if($profile_img)
+                        <button type="button" class="btn btn-otline btn-error" wire:click="resetImage">
+                            Cancel
                         </button>
+                        <button
+                        @error('profile_img')
+                        disabled
+                         @enderror 
+                         class="btn btn-success" type="submit">
+                        Confirm
+                        @else
+                        <label
+                        for="image" class="btn btn-primary">
+                        Update
+                        @endif
+                        <input class="hidden" type="file" wire:model.live="profile_img" accept="image/jpg,image/jpeg,image/png" id="image">
+                        @if($profile_img)
+                        </button>
+                        @else
+                        </label> 
+                        @endif
+                        </label>
+                    </form>
+                </div>
+                      <div class="w-full text-center md:text-left break-words px-2">
+                        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold break-words">
+                            {{Auth::user()->name}}
+                        </h1>
+                        <p class="text-sm sm:text-base text-primary mb-2 break-words">
+                            {{Auth::user()->email}}
+                        </p>
                     </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h1 class="text-3xl font-bold">John Doe</h1>
-                    <p class="text-lg text-primary mb-2">Frontend Developer</p>
-                    <p class="text-base-content/70">Passionate about building user-friendly web applications with modern technologies</p>
-                    <button class="btn btn-primary mt-4">Edit Profile</button>
-                </div>
             </div>
         </div>
     </div>
@@ -31,6 +96,7 @@
         <!-- Left Column -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Personal Information -->
+            <form id="profile" wire:submit="updateProfile">
             <div class="card bg-base-100 shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title mb-4">Personal Information</h2>
@@ -39,140 +105,217 @@
                             <label class="label">
                                 <span class="label-text">Full Name</span>
                             </label>
-                            <input type="text" class="input input-bordered" value="John Doe">
+                            <input type="text" wire:model="name" class="input input-bordered" placeholder="Name" disabled>
+                            @error('name')
+                                <span class="text-error mt-3">
+                                    {{$message}}
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Email Address</span>
                             </label>
-                            <input type="email" class="input input-bordered" value="john@example.com">
+                            <input class="input input-bordered flex items-center" wire:model='email' disabled>
+                            @error('email')
+                            <span class="text-error mt-3">
+                                {{$message}}
+                            </span>
+                        @enderror
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Phone Number</span>
                             </label>
-                            <input type="tel" class="input input-bordered" value="+1 234 567 890">
+                            <input wire:model="phone_number" type="tel" placeholder="Enter Phone Number" class="input input-bordered" disabled>
+                            @error('phone_number')
+                            <span class="text-error mt-3">
+                                {{$message}}
+                            </span>
+                        @enderror
                         </div>
                         <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">Location</span>
+                            <label for="gender" class="ml-2 mt-2 mb-4">Gender:</label>
+                        <div class="flex gap-4">
+                            <input wire:model="gender" value="male"  id="male" type="radio" name="radio-1" class="radio" 
+                            @if($gender == 'male') checked @endif disabled/>
+                            <label for="male" class="mr-2">
+                                Male
                             </label>
-                            <input type="text" class="input input-bordered" value="New York, NY">
+    
+                            <input wire:model="gender" value="female" id="female" type="radio" name="radio-1" wire class="radio"  @if($gender == 'female') checked @endif disabled/>
+                            <label for="female" class="flex gap-2 mr-2">
+                                Female    
+                            </label>
                         </div>
+                        @error('gender')
+                        <span class="text-error mt-3">
+                            {{$message}}
+                        </span>
+                    @enderror
+                    </div>
                     </div>
                     <div class="divider"></div>
                     <h3 class="font-bold mb-2">Social Links</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input type="text" class="input input-bordered flex-1" placeholder="LinkedIn URL">
-                        <input type="text" class="input input-bordered flex-1" placeholder="GitHub URL">
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Github Url</span>
+                            </label>
+                            <input wire:model="github" type="text" class="input input-bordered flex-1 w-full" value="{{Auth::user()->github}}" placeholder="Github URL" disabled>
+                            @error('github')
+                            <span class="text-error mt-3">
+                                {{$message}}
+                            </span>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="label">
+                                <span class="label-text">Linkedin Url</span>
+                            </label>
+                            <input type="text" wire:model="linkedin" class="input input-bordered flex-1 w-full" value="{{Auth::user()->linkedin}}" placeholder="Linkedin URL" disabled>
+                            @error('linkedin')
+                            <span class="text-error mt-3">
+                                {{$message}}
+                            </span>
+                        @enderror
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-2">
+                        <button id="edit" class="btn btn-primary w-40">Edit</button>
+                        <button style="display: none" id="save" type="submit" class="btn btn-primary w-40">
+                            <span wire:loading.class="loading loading-spinner">
+                                Save        
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
-
+            </form>
             <!-- Resume & Documents -->
             <div class="card bg-base-100 shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title mb-4">Resume &amp; Documents</h2>
+                    <label for="resume">
+                    <h2 class="card-title mb-4">Resume</h2>
+                    <form wire:submit="updateResume" class="pb-4">
                     <div class="form-control">
                         <label class="label">
                             <span class="label-text">Upload Resume (PDF/DOCX)</span>
                         </label>
-                        <input type="file" class="file-input file-input-bordered w-full">
-                    </div>
-                    <div class="mt-4">
-                        <div class="flex items-center justify-between p-4 bg-base-200 rounded-box">
-                            <div>
-                                <span class="font-bold">john-doe-resume.pdf</span>
-                                <span class="text-sm text-base-content/70 ml-2">Uploaded 2 days ago</span>
-                            </div>
-                            <button class="btn btn-ghost btn-sm text-error">Replace</button>
+                        <div class="flex items-center gap-2">
+                            <input wire:model.live="resume" type="file" accept="application/pdf,application/doc,application/docx" class="file-input file-input-bordered w-full" required>
+                            <button  class="btn btn-gray text-primary
+                             @if($errors->any('resume'))
+                            btn-disabled
+                            cursor-not-allowed
+                            @endif
+                            "><span wire:loading.class="loading loading-spinner">
+                                Upload Cv
+                            </span></button>
                         </div>
                     </div>
+                </form>
+                @error('resume')
+                    <span class="text-error pt-3">
+                        {{$message}}
+                    </span>
+                @enderror
+                    <div class="mt-4">
+                        <div class="flex items-center justify-between p-4 bg-base-200 rounded-box">
+                            @if ($cv)
+                                <span class="font-bold">{{$cv}}</span>
+                                <button wire:click="deleteCv" class="btn btn-outline btn-error btn-sm">
+                                    <span wire:loading.class="loading loading-spinner">
+                                        Delete
+                                    </span>
+                                </button>
+                            @else
+                            No Cv Uploaded!
+                            @endif
+                        </div>
+                    </div>
+                </label>
                 </div>
             </div>
 
-            <!-- Skills & Experience -->
-            <div class="card bg-base-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title mb-4">Skills &amp; Experience</h2>
-                    <div class="mb-6">
-                        <h3 class="font-bold mb-2">Skills</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="badge badge-primary">JavaScript</span>
-                            <span class="badge badge-primary">React</span>
-                            <span class="badge badge-primary">Tailwind CSS</span>
-                            <button class="btn btn-circle btn-xs">+</button>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-4">
-                        <div class="border-l-4 border-primary pl-4">
-                            <h3 class="font-bold">Senior Frontend Developer</h3>
-                            <p class="text-primary">Tech Leaders Inc.</p>
-                            <p class="text-sm text-base-content/70">2020 - Present</p>
-                            <p class="mt-2">Led development of multiple web applications...</p>
-                        </div>
-                        <!-- Add more experience blocks -->
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Right Column -->
         <div class="space-y-6">
-            <!-- Job Preferences -->
-            <div class="card bg-base-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title mb-4">Job Preferences</h2>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Preferred Role</span>
-                        </label>
-                        <input type="text" class="input input-bordered" value="Senior Frontend Developer">
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Desired Salary</span>
-                        </label>
-                        <input type="text" class="input input-bordered" value="$90,000 - $120,000">
-                    </div>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Job Type</span>
-                        </label>
-                        <select class="select select-bordered">
-                            <option>Remote</option>
-                            <option>Hybrid</option>
-                            <option>On-site</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Account Settings -->
-            <div class="card bg-base-100 shadow-sm">
-                <div class="card-body">
-                    <h2 class="card-title mb-4">Account Settings</h2>
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="label-text">Change Password</span>
-                        </label>
-                        <input type="password" class="input input-bordered" placeholder="New Password">
-                    </div>
-                    <div class="divider"></div>
-                    <button class="btn btn-error btn-outline">Delete Account</button>
-                </div>
-            </div>
-
+            
             <!-- Profile Completeness -->
-            <div class="card bg-primary text-primary-content">
+            {{-- <div class="m-8 md:m-0 card bg-primary text-primary-content">
                 <div class="card-body">
                     <h2 class="card-title">Profile Strength</h2>
                     <div class="radial-progress" style="--value:75">75%</div>
                     <p class="text-sm">Complete your profile for better job matches</p>
                 </div>
+            </div> --}}
+            
+            <!-- Account Settings -->
+            <div class="card bg-base-100 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Account Settings</h2>
+                    <form wire:submit="updatePassword">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Change Password</span>
+                            </label>
+                            <input type="password" class="input input-bordered" wire:model.live.debounce.500ms="password" placeholder="New Password" required>
+                            @error('password')
+                                <span class="text-error mt-2">
+                                    {{$message}}
+                                </span>
+                            @enderror
+                            <button class="btn btn-primary btn-outline mt-4
+                             @error ('password')
+                             btn-disabled cursor-not-allowed
+                            @enderror">Update Password</button>
+                        </div>
+                    </form>
+                        <div class="divider"></div>
+                    <button onclick="delete_modal.showModal()" class="btn btn-error btn-outline">Delete Account</button>
+                </div>
             </div>
         </div>
     </div>
+    <!-- Delete Account Modal -->
+    <dialog id="delete_modal" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <h3 class="font-bold text-lg">Delete Account</h3>
+            <p class="py-4">Are you sure you want to delete your account? This action cannot be undone!</p>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn">Cancel</button>
+                </form>
+                <button class="btn btn-error" wire:click="deleteAccount">Delete Account</button>
+            </div>
+        </div>
+    </dialog>
+    @includeIf('livewire.partials.alert')
 </main>
+@push('scripts')
+    <script>
+        editBtn = document.querySelector('#edit');
+        saveBtn = document.querySelector('#save');
+        inputs = document.querySelectorAll('#profile input');
+
+        document.querySelector('#edit').onclick = (e)=>{
+            e.preventDefault();
+           inputs.forEach(input=>{
+            input.disabled=false;
+           });
+           editBtn.style.display='none';
+           saveBtn.style.display = 'block'
+        }
+
+        saveBtn.onclick = () => {
+                saveBtn.style.display = 'none'
+                editBtn.style.display='block';
+                inputs.forEach(input=>{
+                input.disabled=true;
+            })
+        }
+    </script>
+@endpush
 

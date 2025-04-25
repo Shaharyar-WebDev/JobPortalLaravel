@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('job_skills', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_post_id')->constrained();
+            $table->foreignId('job_post_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('skill_id')->constrained();
         });
     }

@@ -1,11 +1,5 @@
 <div>
     <main class="container mx-auto px-8 py-8">
-        <!-- Breadcrumbs -->
-        {{-- <pre>
-
-            {{print_r($job->job_skills->toArray())}}
-
-        </pre> --}}
         <div class="text-sm breadcrumbs mb-8">
             <ul>
                 <li><a wire:navigate href="{{route('home')}}">Home</a></li>
@@ -16,20 +10,20 @@
             </ul>
         </div>
 
-        <div class="flex flex-col md:flex-row lg:flex-row gap-8">
+        <div class="flex flex-col lg:flex-row gap-8">
             <!-- Main Content -->
             <div class="flex-1">
                 <!-- Job Header -->
                 <div class="card bg-base-200 px-6 py-4 mb-8">
                     <div class="flex justify-between items-start">
                         <!-- Left Content -->
-                        <div class="flex-1 gap-2">
+                        <div class="flex-1 gap-2 min-w-0">
                             <!-- Job Title -->
                             <div class="w-full flex-col md:flex-row flex justify-between gap-2 items-start mb-4">
-                                <h1 class="text-2xl font-bold mb-2">{{$job->title}}</h1>
+                                <h1 class="text-2xl font-bold mb-2  break-words whitespace-normal">{{$job->title}}</h1>
                                  <!-- Urgency Badge -->
                         @if($job->urgently_hiring == 1)
-                        <span class="badge badge-error h-auto md:gap-1 md:mt-1 md:ml-4">
+                        <span class="badge badge-error animate-pulse h-auto md:gap-1 md:mt-1 md:ml-4">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,12 +36,26 @@
 
                             <!-- Company Info -->
                             <div class="flex items-center gap-3 mb-4">
-                                <div class="w-12 h-12 rounded-box bg-primary/10 flex items-center justify-center">
-                                    <span class="text-lg font-bold text-primary">TL</span>
+                                @if($job->company->image && Storage::disk('public')->exists('/images/companies/'.$job->company->image))
+                                <img src="{{asset('/storage/images/companies/'.$job->company->image)}}" class="w-12 h-12 rounded-box bg-primary/10 flex items-center justify-center object-cover">
+                                @else
+                                @php
+                                $initials = '';
+                                $name = explode(' ', $job->company->name);
+                                foreach($name as $initial){
+                                    $initials.=substr($initial, 0, 1);
+                                }
+                                @endphp
+                               <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                                <span class=" font-bold text-primary">  
+                                {{$initials}}
+                                </span>
                                 </div>
+                                @endif
                                 <div>
-                                    <h2 class="font-semibold text-lg">
-                                        <a class="hover:underline" wire:navigate href="">{{$job->company->name}}</a>
+                                    <h2 class="font-semibold text-lg break-words whitespace-normal">
+                                        <a class="hover:underline" wire:navigate href="{{route('company.view', [
+                      'id'=>$job->company->id,'slug'=>App\Helpers\MyFunc::sexySlug($job->company->name, time : false)])}}">{{$job->company->name}}</a>
                                     </h2>
                                     <div class="text-sm text-base-content/70"><a class="hover:underline" wire:navigate
                                             href="{{route('jobs', ['industry' => $job->industry->id])}}">{{$job->company->industry->name}}</a>
@@ -56,14 +64,18 @@
                             </div>
 
                             <!-- Job Specifics -->
-                            <div class="flex flex-wrap gap-3">
+                            <div class="flex flex-wrap gap-x-3 gap-y-2 items-center">
                                 <div class="flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 shrink-0">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                                       </svg>
-                                    <a class="hover:underline" wire:navigate href="{{route('jobs', ['city' => $job->city->id])}}">{{$job->city->name}}</a>, <a class="hover:underline" wire:navigate href="{{route('jobs', ['city_area' => $job->city_area->id])}}">{{$job->city_area->name}}</a>,
-                                    {{$job->address}}
+                                      <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                          <a class="hover:underline break-words" wire:navigate href="{{route('jobs', ['city' => $job->city->id])}}">{{$job->city->name}}</a>, <a class="hover:underline break-words" wire:navigate href="{{route('jobs', ['city_area' => $job->city_area->id])}}">{{$job->city_area->name}}</a>,
+                                          <span class="min-w-0 break-words">
+                                              {{$job->address}}
+                                          </span>
+                                      </div>
                                 </div>
                             </div>
                         </div>
@@ -186,12 +198,12 @@
                                         <div class="flex flex-wrap gap-2">
                                         
                                             @foreach ($job->job_skills as $skill)
-                                            <span class="badge badge-outline">{{$skill->name}}</span>
+                                            <span class="badge h-auto badge-outline">{{$skill->name}}</span>
                                             @endforeach
                                         
                                             @if($job->custom_skills)
                                                 @foreach($job->custom_skills as $custom_skill)
-                                                <span class="badge badge-outline">{{$custom_skill}}</span>
+                                                <span class="badge h-auto badge-outline">{{$custom_skill}}</span>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -208,12 +220,12 @@
                                         <div class="text-sm text-base-content/70 mb-1">Education</div>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach ($job->job_educations as $education)
-                                            <span class="badge badge-outline">{{$education->name}}</span>
+                                            <span class="badge h-auto badge-outline">{{$education->name}}</span>
                                             @endforeach
                                         
                                             @if($job->custom_educations)
                                                 @foreach($job->custom_educations as $custom_education)
-                                                <span class="badge badge-outline">{{$custom_education}}</span>
+                                                <span class="badge h-auto badge-outline">{{$custom_education}}</span>
                                                 @endforeach
                                             @endif
                                         </div>
@@ -236,10 +248,57 @@
                     <!-- Apply Box -->
                     <div class="card bg-base-200 shadow-sm">
                         <div class="card-body">
+                            @if(Auth::check())
+              
+                            @if(App\Models\User::isRole('user'))
+                            @if(\App\Models\User::hasAppliedTo($job->id))
+                             <div class="card-actions">
+                               <button class="btn btn-success disabled flex gap-4 w-full" disabled>
+                               Already Applied
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                 <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                               </svg>                                 
+                               </button>
+                             </div>
+                            @else
                             <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
-                            <button class="btn btn-primary btn-block">Apply Now</button>
+                             <div class="card-actions">
+                               <button class="btn btn-primary flex gap-4 w-full">
+                               Apply Now
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                               </svg>                    
+                               </button>
+                             </div>
+                             </a>
+           
+           
+                             @endif
+                             @else
+                               <div class="card-actions">
+                                 <button class="btn btn-disabled h-auto flex gap-4 w-full">
+                                 Employers Can Not Apply!
+                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                   <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                 </svg>                                       
+                                 </button>
+                               </div>
+                               </a>
+                             @endif
+                            @else
+                 <a wire:click="urlStore({{$job->id}})" wire:navigate href="{{route( 'login',['redirect_to'=>route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])])}}">
+                  <div class="card-actions">
+                    <button class="btn btn-primary h-auto flex gap-4 w-full">
+                    Login To Apply Now
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>                    
+                    </button>
+                  </div>
+                  </a>
+                 @endif
                             <div class="flex justify-center gap-4 mt-4">
-                                <button class="btn btn-ghost btn-sm gap-2">
+                                <button title="{{route('job.view', ['id' => $job->id, 'slug' => $job->slug])}}" title="{{$job->title}}" onclick="shareJob()" class="h-auto btn btn-ghost btn-sm gap-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -248,16 +307,29 @@
                                     </svg>
                                     Share
                                 </button>
-                                </a>
-                                <button class="btn btn-ghost btn-sm gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                        </path>
-                                    </svg>
-                                    Save
-                                </button>
+                                @if(!App\Models\User::isRole('employer'))
+                                @if(count(App\Models\UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $job->id)->get()) <= 0)
+                                <!-- Save Button -->
+                               <div class="tooltip" data-tip="Save Job">
+                                 <button wire:click="saveJob({{$job->id}})" class="btn btn-ghost btn-smh-auto ">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                   </svg>
+                                   Save
+                                 </button>
+                               </div>
+                               @else
+                                <!-- Favorite Button -->
+                                <div class="tooltip" data-tip="Remove From Saved">
+                                 <button wire:click="removeJob({{$job->id}})" class="h-auto btn btn-ghost btn-sm text-error">
+                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                     </svg>
+                                     Remove
+                                 </button>
+                                </div>
+                                @endif
+                               @endif
                             </div>
                         </div>
                     </div>
@@ -266,73 +338,95 @@
                     <div class="shadow-sm">
                         <h2 class="card-title mb-4">Related Jobs</h2>
                         <div class="space-y-4 h-[80vh] max-h-auto overflow-y-scroll">
-                            <!-- Related Job 1 -->
-                            @foreach ($related_jobs as $related_job)
-                            <div class="card bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300 group">
-                              <div class="card-body">
+                            <!-- Related Job -->
+                            @foreach ($related_jobs as $job)   
+                            <!-- Job Card Redesigned -->
+                              <div class="card bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300 group">
+                                <div class="card-body">
                                 <div class="flex items-start justify-between mb-4">
                                   <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
-                                    @if($related_job->company->image && Storage::disk('public')->exists('/images/'.$related_job->company->image))
-                                    <img src="{{asset('storage/images/'.$related_job->company->image)}}" alt="">
-                                    @else
-                                    <div class="text-primary font-bold">
-                                     @php
-                                      $cname = '';
-                                     foreach(explode(' ', $related_job->company->name) as $name){
-                                      $cname.= ucfirst(substr($name,0,1 ));
-                                     }
-                                     @endphp
-                                     {{$cname}}
-                                    </div>
-                                    @endif
+                                  @if($job->company->image && Storage::disk('public')->exists('/images/companies/' . $job->company->image))
+                                  <img class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
+                                  @else
+                                  <div class="text-primary font-bold">
+                                   @php
+                            $cname = '';
+                            foreach (explode(' ', $job->company->name) as $name) {
+                            $cname .= ucfirst(substr($name, 0, 1));
+                            }
+                                   @endphp
+                                   {{$cname}}
+                                   {{$job->company->image}}
+                                  </div>
+                                  @endif
                                   </div>
                                   <div class="flex items-center gap-2">
+                            
+                                    @if($job->urgently_hiring == 1)
+                                    <div class="flex flex-col gap-2">
+                                      <span class="badge badge-error badge-sm h-auto animate-pulse">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                </svg>
+                                                Urgently Hiring
+                                              </span>
+                                  </div>
                                 <!-- "New" Badge for urgency -->
-                                @if ($related_job->created_at->gt(now()->subDays(7)))
-                                <span class="badge badge-primary badge-sm">New</span>
-                                @endif
-                                
-                                @if($related_job->urgently_hiring == 1)
-                                <span class="badge badge-error badge-sm h-auto">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
-                                      stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                  </svg>
-                                  Urgently Hiring
-                              </span>
-                                @endif
-                                <!-- Favorite Button -->
-                                <button class="btn btn-ghost btn-sm">
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                @elseif ($job->created_at->gt(now()->subDays(7)))
+                            <span class="badge badge-primary badge-sm">New</span>
+                            @endif
+              
+                            @if(!App\Models\User::isRole('employer'))
+                               
+                                @if(count(App\Models\UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $job->id)->get()) <= 0)
+                                 <!-- Save Button -->
+                                <div class="tooltip" data-tip="Save Job">
+                                  <button wire:click="saveJob({{$job->id}})" class="btn btn-ghost btn-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                                  </svg>
-                                </button>
-                              </div>
+                                    </svg>
+                                  </button>
                                 </div>
-                                
+                                @else
+               <!-- Favorite Button -->
+               <div class="tooltip" data-tip="Remove From Saved">
+                <button wire:click="removeJob({{$job->id}})" class="btn btn-ghost btn-sm text-error">
+                                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                      </svg>
+                                  </button>
+              </div>
+                                @endif
+              
+                                @endif
+              
+                                </div>
+                                </div>
+                            
                                 <h3 class="transition hover:underline card-title mb-2 md:min-h-[60px] lg:min-h-[auto]">
-                                  <a wire:navigate href="{{route('job.view', ['id' => $related_job->id, 'slug' => $related_job->slug])}}">
-                                    {{Str::limit($related_job->title, 30, '.....')}}
+                                  <a wire:navigate href="{{route('job.view', ['id' => $job->id, 'slug' => $job->slug])}}" title="{{$job->title}}">
+                                  {{Str::limit($job->title, 30, '.....')}}
                                   </a>
                                   </h3>
                                 <div class="text-sm text-base-content/70 mb-4">
-                                  <p><a class="hover:underline" wire:navigate href="{{route('companies')}}">{{$related_job->company->name}}</a> • {{ $related_job->city_area->name }}, {{ $related_job->city->name }}</p>
+                                  <p><a class="hover:underline" wire:navigate href="{{route('company.view', [
+                                    'id'=>$job->company->id,'slug'=>App\Helpers\MyFunc::sexySlug($job->company->name, time : false)])}}">{{$job->company->name}}</a> • {{ $job->city_area->name }}, {{ $job->city->name }}</p>
                                   <p class="flex items-center gap-2 font-bold mt-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                                    </svg>
-                                     Rs {{number_format($related_job->min_salary)}} - Rs {{number_format($related_job->max_salary)}}</p>
-                                </div>        
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                                  </svg>
+                                   Rs {{number_format($job->min_salary)}} - Rs {{number_format($job->max_salary)}}</p>
+                                </div>
+                            
                                 <div class="flex flex-wrap gap-2 mb-6">
-                                  <span class="badge badge-outline">{{$related_job->job_type->name}}</span>
-                                  <span class="badge badge-outline">{{ucfirst($related_job->job_setting)}}</span>
+                                  <span class="badge badge-outline">{{$job->job_type->name}}</span>
+                                  <span class="badge badge-outline">{{ucfirst($job->job_setting)}}</span>
                                   @php
-                                    $diff = round($related_job->created_at->diffInDays(now()));
+                            $diff = round($job->created_at->diffInDays(now()));
                                   @endphp
                                   @if ($diff == 0)
                                    <span class="badge badge-outline text-xs">
-                                    Today
+                                  Today
                                    </span>
                                    @else
                                    <span class="badge badge-outline text-xs">
@@ -340,24 +434,85 @@
                                    </span>
                                   @endif
                                   </div>
-                                <a wire:navigate href="{{route('home')}}">
+                               @if(Auth::check())
+              
+                               @if(App\Models\User::isRole('user'))
+                               @if(\App\Models\User::hasAppliedTo($job->id))
                                 <div class="card-actions">
-                                  <button class="btn btn-primary btn-block">
-                                    Apply Now
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                                    </svg>
+                                  <button class="btn btn-success disabled flex gap-4 w-full" disabled>
+                                  Already Applied
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                  </svg>                                 
                                   </button>
                                 </div>
-                              </a>
+                               @else
+                               <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
+                                <div class="card-actions">
+                                  <button class="btn btn-primary flex gap-4 w-full">
+                                  Apply Now
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                  </svg>                    
+                                  </button>
+                                </div>
+                                </a>
+              
+              
+                                @endif
+                                @else
+                                  <div class="card-actions">
+                                    <button class="btn btn-disabled flex gap-4 w-full">
+                                    Employers Can Not Apply!
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>                                       
+                                    </button>
+                                  </div>
+                                  </a>
+                                @endif
+                               @else
+                               <a wire:click="urlStore({{$job->id}})" wire:navigate href="{{route( 'login',['redirect_to'=>route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])])}}">
+                                <div class="card-actions">
+                                  <button class="btn btn-primary h-auto flex gap-4 w-full">
+                                  Login To Apply Now
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                  </svg>                    
+                                  </button>
+                                </div>
+                                </a>
+                               @endif
+                                </div>
                               </div>
-                            </div>           
-                            @endforeach                         
+                            
+              
+                              @endforeach             
                         </div>
                     </div>
 
                 </div>
             </div>
         </div>
+        @includeIf('livewire.partials.alert')
     </main>
 </div>
+@push('scripts')
+<script>
+    function shareJob() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ $job->title }}',
+                text: 'Check out this Job Posting on LinkDeed!',
+                url: '{{ request()->fullUrl() }}'
+            }).then(() => {
+                console.log('Shared successfully!');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            alert('Sharing not supported on this browser. Please use copy/paste or social icons.');
+        }
+    }
+</script>
+@endpush

@@ -2,14 +2,64 @@
 
 namespace App\Livewire;
 
+use Exception;
 use App\Models\JobPost;
 use Livewire\Component;
+use App\Models\UserSavedJob;
+use Illuminate\Support\Facades\Auth;
+require_once app_path('/Helpers/Flash.php');
 
 class Job extends Component
 {
     public $id;
 
     public $slug;
+
+    public function saveJob($id){
+
+        if(Auth::check()){
+        try{
+            $count = UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $id)->get();
+
+            if(count($count) > 0){
+                flash('response', ['status'=>'info','message'=>'Already Saved']);
+            }else{
+
+                
+                Auth::user()->saved_jobs()->attach($id);
+                    flash('response', ['status'=>'success','message'=>'Saved Successfully']);
+
+            }
+
+        
+        }catch(Exception $error){
+            flash('response', ['status'=>'error','message'=>'An Error Occured']);
+        }
+    }else{
+        flash('response', ['status'=>'info','message'=>'You Need To Log In To Save Jobs']);
+    }
+
+    }
+    public function removeJob($id){
+        try{
+       
+        Auth::user()->saved_jobs()->detach($id);
+
+            flash('response', ['status'=>'success','message'=>'Removed']);
+     
+
+    }catch(Exception $error){
+        flash('response', ['status'=>'error','message'=>'Error Removing']);
+    }
+
+    }
+    
+    public function urlStore($id){
+        $job = JobPost::find($id);
+        session()->put('redirect_to',route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug]));
+        // dd($id, session('redirect_to'));
+    }
+
     public function render()
     {
 
@@ -29,7 +79,11 @@ class Job extends Component
             'city',
             'city_area',
             'experience'
-        )->where('id', '!=', $this->id)
+        )
+        ->whereHas('company' ,function($query){
+            $query->where('job_posts_visibility', '!=','hidden');
+        })
+        ->where('id', '!=', $this->id)
             ->where(function ($query) use ($job) {
                 $query->where('industry_id', $job->industry_id)
                     ->orWhere('city_id', $job->city_id)

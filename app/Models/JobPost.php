@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 class JobPost extends Model
 {
     //
+    protected $guarded = [];
+    
     protected $casts = [
         'custom_educations' => 'array',
         'custom_skills' => 'array'
@@ -52,4 +54,5 @@ public function job_skills(){
     public function experience(){
         return $this->belongsTo(JobExperience::class, 'job_experience_id');
     }
+
 }

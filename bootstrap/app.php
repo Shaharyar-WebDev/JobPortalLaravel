@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\Authentication;
+use App\Http\Middleware\UserRole;
+use App\Http\Middleware\EmployerRole;
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,6 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
+        $middleware->alias([
+            'UserRole' => UserRole::class,
+            'EmployerRole' => EmployerRole::class,
+            'Authentication' => Authentication::class
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -26,10 +26,10 @@ return new class extends Migration
             $table->foreignId('job_experience_id')->constrained();
             $table->json('custom_educations')->nullable();
             $table->json('custom_skills')->nullable();
-            $table->unsignedInteger('min_salary');
-            $table->unsignedInteger('max_salary');
+            $table->unsignedBigInteger('min_salary');
+            $table->unsignedBigInteger('max_salary');
             $table->integer('job_post_duration')->default(30)->comment('in days');
-            $table->tinyInteger('urgently_hiring')->default(2)->comment('1 true, 2 false');
+            $table->boolean('urgently_hiring')->nullable()->default(0)->comment('1 true, 2 false');
             $table->date('apply_before');
             $table->tinyInteger('visibility')->default(1)->comment('1 visible, 2 hidden');
             $table->timestamps();

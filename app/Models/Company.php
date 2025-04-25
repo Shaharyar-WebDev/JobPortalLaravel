@@ -9,13 +9,16 @@ use App\Models\CityArea;
 
 class Company extends Model
 {
+
+    protected $fillable = [
+        'name'
+    ];
     //
     public function industry(){
 
         return $this->belongsTo(Industry::class, 'industry_id');
 
     }
-
     public function city(){
         return $this->belongsTo(City::class, 'city_id');
     }

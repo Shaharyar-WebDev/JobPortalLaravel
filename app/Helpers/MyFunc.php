@@ -38,6 +38,28 @@ class MyFunc
         return $slug;
 
     } 
+
+    public static function checkSlug($Modelclass, $id, $slug, int $code = 404, $message = null){
+        $object = $Modelclass::findorFail($id);
+
+        if($slug != $object->slug){
+            if($message){
+            abort($code, $message);
+            }else{
+                abort($code);
+            }
+        }else{
+            
+            return $object;
+        };
+
+
+    }
+
+    public static function flash($key, $value){
+        session()->flash($key, $value);
+    }
+
     public function __construct()
     {
         //

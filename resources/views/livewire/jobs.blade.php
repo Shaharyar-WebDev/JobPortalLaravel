@@ -188,11 +188,6 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
       </div>
   </div>
 </section>
-
-<pre>
-  {{-- {{print_r($jobs->toArray())}} --}}
-</pre>
-
 <main class="container mx-auto px-4 py-8">
     <!-- Search and Filters Section -->
     <div class="flex flex-col md:flex-row gap-6 mb-8 bg-base-200 rounded-box p-4">
@@ -470,15 +465,15 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
         <!-- Job Listings -->
         <div class="flex-1">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <!-- Job Card Redesigned -->
-
-                @foreach ($jobs as $job)   
+              @if(count($jobs) > 0)
+              @foreach ($jobs as $job)   
+              <!-- Job Card Redesigned -->
                 <div class="card bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300 group">
                   <div class="card-body">
                   <div class="flex items-start justify-between mb-4">
                     <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
-                    @if($job->company->image && Storage::disk('public')->exists('/images/' . $job->company->image))
-                    <img src="{{asset('storage/images/' . $job->company->image)}}" alt="">
+                    @if($job->company->image && Storage::disk('public')->exists('/images/companies/' . $job->company->image))
+                    <img class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
                     @else
                     <div class="text-primary font-bold">
                      @php
@@ -488,6 +483,7 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
               }
                      @endphp
                      {{$cname}}
+                     {{$job->company->image}}
                     </div>
                     @endif
                     </div>
@@ -506,34 +502,42 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
                   @elseif ($job->created_at->gt(now()->subDays(7)))
               <span class="badge badge-primary badge-sm">New</span>
               @endif
-                  <!-- Favorite Button -->
-                  {{-- @if($job) --}}
-                    <div class="tooltip" data-tip="Remove From Saved">
-                      <button class="btn btn-ghost btn-sm text-error">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                        </button>
-                    </div>
-                    {{-- @else --}}
+
+              @if(!App\Models\User::isRole('employer'))
+                 
+                  @if(count(App\Models\UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $job->id)->get()) <= 0)
+                   <!-- Save Button -->
                   <div class="tooltip" data-tip="Save Job">
-                    <button class="btn btn-ghost btn-sm">
+                    <button wire:click="saveJob({{$job->id}})" class="btn btn-ghost btn-sm">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                       </svg>
                     </button>
                   </div>
-                  {{-- @endif --}}
+                  @else
+ <!-- Favorite Button -->
+ <div class="tooltip" data-tip="Remove From Saved">
+  <button wire:click="removeJob({{$job->id}})" class="btn btn-ghost btn-sm text-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+</div>
+                  @endif
+
+                  @endif
+
                   </div>
                   </div>
               
                   <h3 class="transition hover:underline card-title mb-2 md:min-h-[60px] lg:min-h-[auto]">
-                    <a wire:navigate href="{{route('job.view', ['id' => $job->id, 'slug' => $job->slug])}}">
+                    <a wire:navigate href="{{route('job.view', ['id' => $job->id, 'slug' => $job->slug])}}" title="{{$job->title}}">
                     {{Str::limit($job->title, 30, '.....')}}
                     </a>
                     </h3>
                   <div class="text-sm text-base-content/70 mb-4">
-                    <p><a class="hover:underline" wire:navigate href="{{route('companies')}}">{{$job->company->name}}</a> • {{ $job->city_area->name }}, {{ $job->city->name }}</p>
+                    <p><a class="hover:underline" wire:navigate href="{{route('company.view', [
+                      'id'=>$job->company->id,'slug'=>App\Helpers\MyFunc::sexySlug($job->company->name, time : false)])}}">{{$job->company->name}}</a> • {{ $job->city_area->name }}, {{ $job->city->name }}</p>
                     <p class="flex items-center gap-2 font-bold mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
@@ -557,7 +561,20 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
                      </span>
                     @endif
                     </div>
-                  <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
+                 @if(Auth::check())
+
+                 @if(App\Models\User::isRole('user'))
+                 @if(\App\Models\User::hasAppliedTo($job->id))
+                  <div class="card-actions">
+                    <button class="btn btn-success disabled flex gap-4 w-full" disabled>
+                    Already Applied
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>                                 
+                    </button>
+                  </div>
+                 @else
+                 <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
                   <div class="card-actions">
                     <button class="btn btn-primary flex gap-4 w-full">
                     Apply Now
@@ -567,19 +584,68 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
                     </button>
                   </div>
                   </a>
+
+
+                  @endif
+                  @else
+                    <div class="card-actions">
+                      <button class="btn btn-disabled h-auto flex gap-4 w-full">
+                      Employers Can Not Apply!
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>                                       
+                      </button>
+                    </div>
+                    </a>
+                  @endif
+                 @else
+                 <a wire:click="urlStore({{$job->id}})" wire:navigate href="{{route( 'login',['redirect_to'=>route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])])}}">
+                  <div class="card-actions">
+                    <button class="btn btn-primary h-auto flex gap-4 w-full">
+                    Login To Apply Now
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>                    
+                    </button>
+                  </div>
+                  </a>
+                 @endif
                   </div>
                 </div>
               
 
-        @endforeach
+                @endforeach
+              @else
+              <!-- Empty State -->
+              <div class="col-span-3 w-full flex justify-center items-center">
+              <div class="text-center py-16">
+            <div class="max-w-md mx-auto mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-base-content/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold mb-4">No Job Postings</h2>
+            <p class="text-base-content/70 mb-6">Please Check Back Later For Jobs</p>
+            <a wire:navigate href="{{route('employer.jobs-add')}}" class="btn btn-primary mt-4 md:mt-0 gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>          
+                Post a Job
+            </a>
+              </div>
+            </div>
+              @endif
             </div>
 
             <!-- Pagination -->
             {{$jobs->links('pagination::tailwind')}}
         </div>
     </div>
-</main>
+  </main>
+  
+  @include('livewire.partials.alert')
 </div>
+
 
 @push('scripts')
 <script type="module" src="/js/jobs.js"></script>  

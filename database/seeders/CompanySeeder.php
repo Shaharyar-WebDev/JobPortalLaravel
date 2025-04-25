@@ -16,8 +16,11 @@ class CompanySeeder extends Seeder
         //
         $companies = collect([
             [
+                'contact' => '03112727043',
+                'user_id' => 3,
                 'name' => 'Shaharyar Corporation',
                 'email' => 'shery.codes@gmail.com',
+                'image' => 'ChatGPT Image Apr 4, 2025, 01_18_55 PM.png',
                 'industry_id' => 1,
                 'sub_industry_id' => 6,
                 'company_size' => '1-50',
@@ -49,6 +52,8 @@ class CompanySeeder extends Seeder
 '
             ],
             [
+                'contact' => '03112727043',
+                'user_id' => 2,
                 'name' => 'NovaTech Solutions',
                 'email' => 'contact@novatech.com',
                 'industry_id' => 3,
@@ -77,6 +82,8 @@ class CompanySeeder extends Seeder
             At NovaTech Solutions, we build intelligent systems that power the future. 🚀'
             ],
             [
+                'contact' => '03112727043',
+                'user_id' => 1,
                 'name' => 'Vertex Innovations',
                 'email' => 'info@vertexinnovations.com',
                 'industry_id' => 2,

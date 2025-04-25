@@ -1,7 +1,7 @@
 <div>
     {{-- Be like water. --}}
      <!-- Hero Section -->
- <div class="hero h-auto min-h-96 relative">
+ <div class="hero h-auto min-h-96 relative overflow-hidden">
     <div class="absolute top-0 right-0 opacity-10 -translate-y-1/3">
         <svg viewBox="0 0 200 200" class="w-[600px] h-[600px]" xmlns="http://www.w3.org/2000/svg">
           <path fill="currentColor" d="M46.9,-49.3C59.6,-36.1,67.3,-18,66.6,-0.7C65.9,16.6,56.8,33.2,44.1,44.3C31.4,55.3,15.7,60.9,-1.7,62.6C-19.1,64.3,-38.2,62.2,-50.4,51.2C-62.6,40.2,-67.8,20.1,-66.9,0.7C-66.1,-18.7,-59.3,-37.3,-47.1,-50.5C-34.9,-63.7,-17.4,-71.3,0.7,-71.9C18.8,-72.6,37.6,-66.2,46.9,-49.3Z" transform="translate(100 100)"></path>
@@ -20,8 +20,8 @@
         </div></div>
     <div class="hero-content text-center relative">
         <div class="max-w-2xl">
-            @if($company->image && Storage::disk('public')->exists('/images/'.$company->image))
-            <img loading="lazy" src="{{asset('storage/images/'.$company->image)}}" class="object-cover w-32 h-32 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            @if($company->image && Storage::disk('public')->exists('/images/companies/'.$company->image))
+            <img loading="lazy" src="{{asset('storage/images/companies/'.$company->image)}}" class="object-cover w-32 h-32 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
                 <!-- <span class="text-4xl font-bold text-primary">TL</span> -->
             @else
             <div class="object-cover w-32 h-32 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
@@ -38,7 +38,7 @@
             </div>
             @endif
             <h1 class="mb-4 text-4xl font-bold">{{$company->name}}</h1>
-            <div class="flex justify-center gap-4 mb-4 items-center">
+            <div class="flex flex-col justify-center gap-4 mb-4 items-center">
                 <span class="badge h-auto badge-lg badge-primary"><a class="hover:underline" wire:navigate
                     href="{{route('jobs', ['industry' => $company->industry->id])}}">{{$company->industry->name}}</a>
                 </span>
@@ -50,16 +50,6 @@
   <a class="hover:underline" wire:navigate href="{{route('jobs', ['city' => $company->city->id])}}">{{$company->city->name}}</a>, <a class="hover:underline" wire:navigate href="{{route('jobs', ['city_area' => $company->city_area->id])}}">{{$company->city_area->name}}</a>
 </span></span>
             </div>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-2">
-            <button class="btn btn-primary gap-2">
-                Follow Company
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </button>
-            <!-- Review Modal -->
-            <button class="btn btn-primary" onclick="reviewModal.showModal()">Write Review</button>
-        </div>
         </div>
     </div>
   </div>
@@ -126,67 +116,81 @@
             <!-- Updated Social & Share Section -->
              <!-- Social Cards Grid -->
         <div class="grid grid-cols-1 gap-4">
-            <div class="card bg-base-200 shadow-sm">
-                <div class="card-body p-6">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
-                        <div class="space-y-2">
-                            <h3 class="text-xl font-bold">Connect With Us</h3>
-                            <p class="text-sm text-base-content/70">Follow our social channels for updates</p>
-                        </div>
-                        <div class="flex gap-2 mt-4 md:mt-0">
-                            <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
-                                </svg>
-                            </a>
-                            <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
-                                </svg>
-                            </a>
-                            <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
-                                </svg>
-                            </a>
-                        </div>
+          @php
+          $company_emp = \App\Models\User::findOrFail($company->user_id);
+          @endphp
+
+        @if($company_emp->github || $company_emp->linkedin)
+          <div class="card bg-base-200 shadow-sm">
+            <div class="card-body p-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                    <div class="space-y-2">
+                        <h3 class="text-xl font-bold">Connect With Us</h3>
+                        <p class="text-sm text-base-content/70">Follow our social channels for updates</p>
+                    </div>
+                    <div class="flex gap-2 mt-4 md:mt-0">
+                      @if($company_emp->linkedin)
+                        <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300" href="{{$company_emp->linkedin}}" title="{{$company_emp->linkedin}}" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
+                            </svg>
+                        </a>
+                        @endif
+                        @if($company_emp->github)
+                        <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300" href="{{$company_emp->github}}" title="{{$company_emp->github}}" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+                            </svg>
+                        </a>
+                        @endif
                     </div>
                 </div>
             </div>
+        </div>
+
+
+@endif
+
+@php
+  $company_url = route('company.view', [
+    'id'=>$company->id,'slug'=>App\Helpers\MyFunc::sexySlug($company->name, time : false)]);
+@endphp
+
 <div class="card bg-base-200 shadow-sm">
     <div class="card-body p-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <!-- Text Content -->
             <div class="space-y-2">
-                <h3 class="text-xl font-bold">Share This Opportunity</h3>
+                <h3 class="text-xl font-bold">Share This Company</h3>
                 <p class="text-sm text-base-content/70">Spread the word with your network</p>
             </div>
             
             <!-- Social Icons -->
             <div class="flex gap-2">
-                <!-- Twitter/X -->
+                {{-- <!-- Twitter/X -->
                 <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" aria-label="Share on Twitter">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
                     </svg>
-                </a>
+                </a> --}}
 
                 <!-- Facebook -->
-                <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" aria-label="Share on Facebook">
+                <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" href="https://www.facebook.com/sharer/sharer.php?u={{ $company_url }}" target="_blank"
+                  title="https://www.facebook.com/sharer/sharer.php?u={{ $company_url }}" aria-label="Share on Facebook">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
                     </svg>
                 </a>
 
                 <!-- LinkedIn -->
-                <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" aria-label="Share on LinkedIn">
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ $company_url }}&title={{ $company->name }}" title="https://www.linkedin.com/shareArticle?mini=true&url={{ $company_url }}&title={{ $company->name }}" class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" target="_blank" aria-label="Share on LinkedIn">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
                     </svg>
                 </a>
 
                 <!-- Generic Share -->
-                <a class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" aria-label="Share via Link">
+                <a onclick="shareCompanyProfile()" class="btn btn-ghost btn-circle text-primary hover:bg-base-300 transition-colors" aria-label="Share via Link">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
                     </svg>
@@ -197,8 +201,8 @@
         <!-- Optional Copy Link Field -->
         <div class="mt-4">
             <div class="flex gap-2">
-                <input type="text" value="{{url()->current()}}" class="input input-bordered w-full truncate" readonly="">
-                <button class="btn btn-ghost text-primary">
+                <input type="text" id="url" value="{{$company_url}}" class="input input-bordered w-full truncate" readonly="">
+                <button onclick="copy('{{$company_url}}')" class="btn btn-ghost text-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                     </svg>
@@ -314,86 +318,175 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <!-- Job Card -->
-              @foreach ($jobs as $job)
-                <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300 group">
+              @if(count($jobs) > 0)
+              @foreach ($jobs as $job)   
+              <!-- Job Card Redesigned -->
+                <div class="card bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300 group">
                   <div class="card-body">
-                    <div class="flex items-start justify-between mb-4">
-                      <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
-                        @if($job->company->image && Storage::disk('public')->exists('/images/'.$job->company->image))
-                        <img src="{{asset('storage/images/'.$job->company->image)}}" alt="">
-                        @else
-                        <div class="text-primary font-bold">
-                         @php
-                          $cname = '';
-                         foreach(explode(' ', $job->company->name) as $name){
-                          $cname.= ucfirst(substr($name,0,1 ));
-                         }
-                         @endphp
-                         {{$cname}}
-                        </div>
-                        @endif
-                      </div>
-                      <div class="flex items-center gap-2">
-                    <!-- "New" Badge for urgency -->
-                    @if ($job->created_at->gt(now()->subDays(7)))
-                    <span class="badge badge-primary badge-sm">New</span>
+                  <div class="flex items-start justify-between mb-4">
+                    <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
+                    @if($job->company->image && Storage::disk('public')->exists('/images/companies/' . $job->company->image))
+                    <img class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
+                    @else
+                    <div class="text-primary font-bold">
+                     @php
+              $cname = '';
+              foreach (explode(' ', $job->company->name) as $name) {
+              $cname .= ucfirst(substr($name, 0, 1));
+              }
+                     @endphp
+                     {{$cname}}
+                     {{$job->company->image}}
+                    </div>
                     @endif
-                    
-                    @if($job->urgently_hiring == 1)
-                    <span class="badge badge-error badge-sm w-auto h-auto">Urgently Hiring</span>
-                    @endif
-                    <!-- Favorite Button -->
-                    <button class="btn btn-ghost btn-sm">
+                    </div>
+                    <div class="flex items-center gap-2">
+              
+                      @if($job->urgently_hiring == 1)
+                      <div class="flex flex-col gap-2">
+                        <span class="badge badge-error badge-sm h-auto animate-pulse">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                  </svg>
+                                  Urgently Hiring
+                                </span>
+                    </div>
+                  <!-- "New" Badge for urgency -->
+                  @elseif ($job->created_at->gt(now()->subDays(7)))
+              <span class="badge badge-primary badge-sm">New</span>
+              @endif
+          
+              @if(!App\Models\User::isRole('employer'))
+                 
+                  @if(count(App\Models\UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $job->id)->get()) <= 0)
+                   <!-- Save Button -->
+                  <div class="tooltip" data-tip="Save Job">
+                    <button wire:click="saveJob({{$job->id}})" class="btn btn-ghost btn-sm">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                       </svg>
                     </button>
                   </div>
-                    </div>
-                    
-                    <h3 class="card-title mb-2">{{Str::limit($job->title, 30, '.....')}}</h3>
-                    <div class="text-sm text-base-content/70 mb-4">
-                      <p>{{$job->company->name}} • {{ $job->city_area->name }}, {{ $job->city->name }}</p>
-                      <p class="flex items-center gap-2 font-bold mt-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                  @else
+          <!-- Favorite Button -->
+          <div class="tooltip" data-tip="Remove From Saved">
+          <button wire:click="removeJob({{$job->id}})" class="btn btn-ghost btn-sm text-error">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
-                         Rs {{number_format($job->min_salary)}} - Rs {{number_format($job->max_salary)}}</p>
-                    </div>
-                    
-                    <div class="flex flex-wrap gap-2 mb-6">
-                      <span class="badge badge-outline">{{$job->job_type->name}}</span>
-                      <span class="badge badge-outline">{{ucfirst($job->job_setting)}}</span>
-                      @php
-                        $diff = round($job->created_at->diffInDays(now()));
-                      @endphp
-                      @if ($diff == 0)
-                       <span class="badge badge-outline text-xs">
-                        Today
-                       </span>
-                       @else
-                       <span class="badge badge-outline text-xs">
-                      {{$diff}} {{Str::plural('day', $diff)}} ago
-                       </span>
-                      @endif
-                      </div>
-                    <div class="card-actions">
-                        <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
-                      <button class="btn btn-primary btn-block">
-                        Apply Now
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
-                      </button>
+                    </button>
+          </div>
+                  @endif
+          
+                  @endif
+          
+                  </div>
+                  </div>
+              
+                  <h3 class="transition hover:underline card-title mb-2 md:min-h-[60px] lg:min-h-[auto]">
+                    <a wire:navigate href="{{route('job.view', ['id' => $job->id, 'slug' => $job->slug])}}" title="{{$job->title}}">
+                    {{Str::limit($job->title, 30, '.....')}}
                     </a>
+                    </h3>
+                  <div class="text-sm text-base-content/70 mb-4">
+                    <p><a class="hover:underline" wire:navigate href="{{route('company.view', [
+                      'id'=>$job->company->id,'slug'=>App\Helpers\MyFunc::sexySlug($job->company->name, time : false)])}}">{{$job->company->name}}</a> • {{ $job->city_area->name }}, {{ $job->city->name }}</p>
+                    <p class="flex items-center gap-2 font-bold mt-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
+                    </svg>
+                     Rs {{number_format($job->min_salary)}} - Rs {{number_format($job->max_salary)}}</p>
+                  </div>
+              
+                  <div class="flex flex-wrap gap-2 mb-6">
+                    <span class="badge badge-outline">{{$job->job_type->name}}</span>
+                    <span class="badge badge-outline">{{ucfirst($job->job_setting)}}</span>
+                    @php
+              $diff = round($job->created_at->diffInDays(now()));
+                    @endphp
+                    @if ($diff == 0)
+                     <span class="badge badge-outline text-xs">
+                    Today
+                     </span>
+                     @else
+                     <span class="badge badge-outline text-xs">
+                    {{$diff}} {{Str::plural('day', $diff)}} ago
+                     </span>
+                    @endif
                     </div>
+                 @if(Auth::check())
+          
+                 @if(App\Models\User::isRole('user'))
+                 @if(\App\Models\User::hasAppliedTo($job->id))
+                  <div class="card-actions">
+                    <button class="btn btn-success disabled flex gap-4 w-full" disabled>
+                    Already Applied
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>                                 
+                    </button>
+                  </div>
+                 @else
+                 <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
+                  <div class="card-actions">
+                    <button class="btn btn-primary flex gap-4 w-full">
+                    Apply Now
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>                    
+                    </button>
+                  </div>
+                  </a>
+          
+          
+                  @endif
+                  @else
+                    <div class="card-actions">
+                      <button class="btn btn-disabled h-auto flex gap-4 w-full">
+                      Employers Can Not Apply!
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>                                       
+                      </button>
+                    </div>
+                    </a>
+                  @endif
+                 @else
+                 <a wire:click="urlStore({{$job->id}})" wire:navigate href="{{route( 'login',['redirect_to'=>route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])])}}">
+                  <div class="card-actions">
+                    <button class="btn btn-primary h-auto flex gap-4 w-full">
+                    Login To Apply Now
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>                    
+                    </button>
+                  </div>
+                  </a>
+                 @endif
                   </div>
                 </div>
               
-              @endforeach
+          
+                @endforeach
+              @else
+              <!-- Empty State -->
+              <div class="col-span-4 w-full flex justify-center items-center">
+              <div class="text-center py-16">
+            <div class="max-w-md mx-auto mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 mx-auto text-base-content/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold mb-4">No Job Postings For This Company Yet</h2>
+            <p class="text-base-content/70 mb-6">Please Check Back Later For Jobs</p>
+              </div>
+            </div>
+              @endif
               <!-- Add more job cards -->
               
           </div>
+
+          @if(count($jobs) > 0)
             <!-- View All Button -->
   <div class="text-center">
     <a wire:navigate href="{{route('jobs', ['company'=> $company->id])}}">
@@ -405,9 +498,11 @@
     </button>
   </a>
   </div>
+  @endif
       </section>
+      @includeIf('livewire.partials.alert')
   
-      <!-- Reviews Section -->
+      {{-- <!-- Reviews Section -->
       <section class="bg-base-100 py-8 md:py-12">
         <div class="container mx-auto px-4">
           <!-- Section Header -->
@@ -529,10 +624,10 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> --}}
   </main>
   
-  <dialog id="reviewModal" class="modal">
+  {{-- <dialog id="reviewModal" class="modal"> NOT IN USE
       <div class="modal-box">
           <h3 class="font-bold text-lg mb-4">Add Your Review</h3>
         <div class="modal-action">
@@ -571,11 +666,32 @@
         </form>
         </div>
       </div>
-    </dialog>
+    </dialog> --}}
 </div>
 
 
 @push('scripts')
+  <script>
+    function shareCompanyProfile() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ $company->name }}',
+                text: 'Check out this company profile on LinkDeed!',
+                url: '{{ request()->fullUrl() }}'
+            }).then(() => {
+                console.log('Shared successfully!');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            alert('Sharing not supported on this browser. Please use copy/paste or social icons.');
+        }
+    }
+
+    function copy(url){
+      navigator.clipboard.writeText(url);
+    }
+</script>
 <script type="module" src="/js/company-profile.js"></script>
 @endpush
  

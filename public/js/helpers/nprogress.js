@@ -1,4 +1,4 @@
-export const initNprogress = () => {
+export const initNprogress = (callback = () => {}) => {
     // initialize nprogress
     Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
     // Runs immediately before a commit's payload is sent to the server...
@@ -14,6 +14,7 @@ succeed(({ snapshot, effect }) => {
     // Runs after a successful response is received and processed
     // with a new snapshot and list of effects...
   NProgress.done();
+  callback();
 })
 
 fail(() => {

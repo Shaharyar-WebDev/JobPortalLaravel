@@ -24,12 +24,29 @@
 
                     <!-- Company Info -->
                     <div class="flex items-center gap-3 mb-4">
+                        @if($job->company->image && Storage::disk('public')->exists('/images/companies/'.$job->company->image))
+                        <img loading="lazy" src="{{asset('storage/images/companies/'.$job->company->image)}}" class="w-12 h-12 rounded-box bg-primary/10 flex items-center justify-center">
+                        </img>
+                        @else
                         <div class="w-12 h-12 rounded-box bg-primary/10 flex items-center justify-center">
-                            <span class="text-lg font-bold text-primary">TL</span>
+                          <span class="text-2xl font-bold text-primary">  
+                           
+                          @php
+                          $name = explode(' ',$job->company->name);
+                          $initials = '';
+                          foreach($name as $initial){
+                            $initials.= substr($initial, 0, 1);
+                          }
+                          @endphp
+                         {{$initials}}
+                          </span>
                         </div>
-                        <div>
+                      
+                        @endif
+                        <div>                  
                             <h2 class="font-semibold text-lg">
-                                <a class="hover:underline" wire:navigate href="">{{$job->company->name}}</a>
+                                <a class="text-primary
+                                 hover:underline" wire:navigate href="">{{$job->company->name}}</a>
                             </h2>
                             <div class="text-sm text-base-content/70"><a class="hover:underline" wire:navigate
                                     href="{{route('jobs', ['industry' => $job->industry->id])}}">{{$job->company->industry->name}}</a>
@@ -62,7 +79,7 @@
         
     
         <!-- Application Form -->
-        <form class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <form wire:submit="apply" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left Column -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Personal Information -->
@@ -75,18 +92,33 @@
                                     <span class="label-text">Full Name</span>
                                 </label>
                                 <input wire:model.live.debounce.500ms="name" type="text" class="input input-bordered" required="">
+                                @error('name')
+                                    <span class="text-error mt-2">
+                                        {{$message}}
+                                    </span>
+                                @enderror
                             </div>
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text">Email Address</span>
                                 </label>
-                                <input wire:model.live.debounce.500ms="email" type="email" class="input input-bordered" required="">
+                                <input wire:model.live.debounce.500ms="email" type="email"  value="{{Auth::user()->email}}"class="input input-bordered" required="">
+                                @error('email')
+                                <span class="text-error mt-2">
+                                    {{$message}}
+                                </span>
+                            @enderror
                             </div>
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text">Phone Number</span>
                                 </label>
-                                <input wire:model.live.debounce.500ms="contact" type="tel" class="input input-bordered" required="">
+                                <input wire:model.live.debounce.500ms="contact" type="tel" {{Auth::user()->contact}} class="input input-bordered" required="">
+                                @error('contact')
+                                <span class="text-error mt-2">
+                                    {{$message}}
+                                </span>
+                            @enderror
                             </div>
                         </div>
                     </div>
@@ -99,7 +131,7 @@
                             <div class="flex items-center justify-center w-full">
                                 <label class="flex flex-col w-full h-auto2 border-4 border-dashed hover:border-primary cursor-pointer">
                                     <div class="flex flex-col items-center justify-center pt-7">
-                                        @if($resume)
+                                        @if($resume_name)
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-12 w-12 text-primary">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                                           </svg>  
@@ -108,8 +140,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                         </svg>
                                         @endif
-                                        @if($resume)
-                                        <p class="pt-1 text-sm">{{$resume->getClientOriginalName()}}
+                                        @if($resume_name)
+                                        <p class="pt-1 text-sm">{{$resume_name}}
                                         </p>
                                         <p class="pt-1 text-sm">click to Change</p>
                                         @else
@@ -118,14 +150,24 @@
                                         <p class="text-xs text-base-content/70">PDF, DOC, DOCX (Max 5MB)</p>
                                     </div>
                                     {{-- @endif --}}
-                                    <input type="file" wire:model.live.debounce.500ms="resume" class="opacity-0" accept=".pdf,.doc,.docx" required="">
+                                    <input type="file" wire:model.live.debounce.500ms="resume" class="opacity-0" accept=".pdf,.doc,.docx">
+                                    @error('resume_name')
+                                    <span class="text-center text-error mb-2">
+                                        {{$message}}
+                                    </span>
+                                    @enderror
+                                    @error('resume')
+                                    <span class="text-center text-error mb-2">
+                                        {{$message}}
+                                    </span>
+                                @enderror
                                 </label>
                             </div>
                         </div>
                     </div>
                 </div>
     
-                <!-- Cover Letter -->
+                {{-- <!-- Cover Letter -->
                 <div class="card bg-base-200 shadow-sm">
                     <div class="card-body">
                         <h2 class="card-title mb-4">Cover Letter</h2>
@@ -133,12 +175,15 @@
                             <label class="label">
                                 <span class="label-text">Letter to Employer (Optional)</span>
                             </label>
-                            <textarea class="textarea textarea-bordered h-32" placeholder="Explain why you're a good fit..."></textarea>
+                            <textarea wire:model="cover_letter" class="textarea textarea-bordered h-32" placeholder="Explain why you're a good fit..."></textarea>
                         </div>
+                        @error('cover_letter')
+                            {{$message}}
+                        @enderror
                     </div>
-                </div>
+                </div> --}}
     
-                <!-- Additional Questions -->
+                {{-- <!-- Additional Questions -->
                 <div class="card bg-base-200 shadow-sm">
                     <div class="card-body">
                         <h2 class="card-title mb-4">Additional Questions</h2>
@@ -157,7 +202,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
     
             <!-- Right Column -->
@@ -168,8 +213,9 @@
                         <h2 class="card-title mb-4">Application Summary</h2>
                         <div class="space-y-4">
                              <div class="flex gap-2 min-w-0"> <!-- Added min-w-0 for proper truncation -->
+                                {{-- {{dd($name)}} --}}
                                 <span class="text-base-content/70">Name:</span>
-                                <input class="w-full font-medium bg-transparent cursor-text" value="{{$name}}" disabled="" readonly="" title="{{$name}}"> <!-- Added truncate and title -->
+                                <input class="w-full font-medium bg-transparent cursor-text" value="{{$full_name}}" disabled="" readonly="" title="{{$full_name}}"> <!-- Added truncate and title -->
                             </div>
                             <div class="flex gap-2 min-w-0"> <!-- Added min-w-0 for proper truncation -->
                                 <span class="text-base-content/70">Email:</span>
@@ -182,7 +228,7 @@
                             <div class="flex gap-2 min-w-0"> <!-- Added min-w-0 for proper truncation -->
                                 <span class="text-base-content/70">Resume:</span>
                                 <input class="w-full font-medium bg-transparent cursor-text" disabled="" readonly=""
-                                @if($resume)value="{{$resume->getClientOriginalName()}}" title="{{$contact}}@endif"> <!-- Added truncate and title -->
+                                @if($resume_name)value="{{$resume_name}}" title="{{$contact}}@endif"> <!-- Added truncate and title -->
                             </div>
                         </div>
                         
@@ -196,28 +242,17 @@
                         </div>
                 
                         <button class="btn btn-primary btn-block mt-4" type="submit">
-                            Submit Application
+                            <span wire:loading.class="loading loading-spinner">
+                                Submit Application
+                            </span>
                         </button>
                 
-                        <button class="btn btn-ghost btn-block mt-2">
-                            Save Draft
-                        </button>
                     </div>
                 </div>
             </div>
         </form>
-    
-        <!-- Success Message (Hidden by default) -->
-        <div class="alert alert-success mt-8 hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <div>
-                <h3 class="font-bold">Application Submitted!</h3>
-                <div class="text-xs">We've received your application. Our team will review it and get back to you soon.</div>
-            </div>
-        </div>
     </main>
+    @includeIf('livewire.partials.alert')
 </div>
 
 @push('scripts')

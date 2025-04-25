@@ -96,7 +96,7 @@ class Companies extends Component
             }
     
         $num_of_comp = count($query->get());    
-        $companies = $query->paginate(1);
+        $companies = $query->paginate(8);
         return view('livewire.companies', [
             'companies' => $companies,
             'num_of_comp' => $num_of_comp,

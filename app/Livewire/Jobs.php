@@ -14,8 +14,12 @@ use App\Models\Education;
 use App\Models\SubIndustry;
 use Livewire\Attributes\On;
 use App\Models\JobEducation;
+use App\Models\UserSavedJob;
 use Livewire\WithPagination;
 use App\Models\JobExperience;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+require_once app_path('Helpers/Flash.php');
 
 class Jobs extends Component
 {
@@ -80,14 +84,59 @@ class Jobs extends Component
 
         $this->reset(['search', 'industry', 'sub_industry', 'city', 'city_area', 'job_setting', 'sort', 'job_type', 'experience', 'job_educations', 'customEducations', 'custom_skills', 'job_skills', 'salary_above', 'salary_below', 'company']);
     }
+
+    public function saveJob($id){
+
+        if(Auth::check()){
+        try{
+            $count = UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $id)->get();
+
+            if(count($count) > 0){
+                flash('response', ['status'=>'info','message'=>'Already Saved']);
+            }else{
+
+                
+                Auth::user()->saved_jobs()->attach($id);
+                    flash('response', ['status'=>'success','message'=>'Saved Successfully']);
+
+            }
+
+        
+        }catch(Exception $error){
+            flash('response', ['status'=>'error','message'=>'An Error Occured']);
+        }
+    }else{
+        flash('response', ['status'=>'info','message'=>'You Need To Log In To Save Jobs']);
+    }
+
+    }
+    public function removeJob($id){
+        try{
+       
+        Auth::user()->saved_jobs()->detach($id);
+
+            flash('response', ['status'=>'success','message'=>'Removed']);
+     
+
+    }catch(Exception $error){
+        flash('response', ['status'=>'error','message'=>'Error Removing']);
+    }
+
+    }
+
+    public function urlStore($id){
+        $job = JobPost::find($id);
+        session()->put('redirect_to',route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug]));
+        // dd($id, session('redirect_to'));
+    }
+
     public function render()
     {
-
-
-
         $industries = Industry::all();
         $cities = City::all();
-        $query = JobPost::with('company', 'job_type', 'job_educations', 'job_skills', 'city', 'city_area', 'experience');
+        $query = JobPost::with('company', 'job_type', 'job_educations', 'job_skills', 'city', 'city_area', 'experience')->whereHas('company' ,function($query){
+            $query->where('job_posts_visibility', '!=','hidden');
+        });
         $city_areas = CityArea::all();
         $sub_industries = SubIndustry::all();
         $job_experiences = JobExperience::all();
@@ -222,6 +271,10 @@ class Jobs extends Component
 
         // $jobs = JobPost::with(['company','job_type','city','city_area'])->get();
         $jobs = $query->paginate(5);
+
+        // dd($query->whereHas('company' ,function($query){
+        //     $query->where('job_posts_visibility', '!=','hidden');
+        // })->get());
 
         return view(
             'livewire.jobs',

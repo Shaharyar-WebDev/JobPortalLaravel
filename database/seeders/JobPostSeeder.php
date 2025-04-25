@@ -19,6 +19,7 @@ class JobPostSeeder extends Seeder
             [
                 'company_id' =>  1,
                 'title' => 'PHP LARAVEL DEVELOPER',
+    'slug' => 'php-laravel-developer-karachi-shaharyar-corporation-1744153121',
                 'description' => 'Job Overview:
 
 We are seeking a skilled PHP Laravel Developer to join our dynamic team. The ideal candidate will be responsible for developing and maintaining high-quality web applications using the Laravel framework. This role requires collaboration with cross-functional teams to design, develop, and implement solutions that meet our business needs.​
@@ -136,6 +137,7 @@ To apply, please submit your resume along with a cover letter detailing your exp
 [
     'company_id' => 2,
     'title' => 'FRONT-END REACT DEVELOPER',
+    'slug' => 'front-end-react-developer-islamabad-novatech-solutions-1744153334',
     'description' => 'Job Overview:
 
 We are looking for a talented Front-End React Developer to build dynamic, responsive web applications. The role involves working closely with back-end developers and designers to create seamless user experiences.

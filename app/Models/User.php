@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -45,4 +46,44 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function company(){
+
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function saved_jobs(){
+        return $this->belongsToMany(JobPost::class, 'user_saved_jobs', 'user_id', 'job_post_id');
+    }
+
+    public function applications(){
+        return $this->belongsToMany(JobPost::class, 'job_applications', 'user_id', 'job_post_id')->withTimestamps()->withPivot([
+            'status', 'name', 'email', 'phone_number', 'cv'
+        ]);
+    }
+
+    public static function hasAppliedTo($job_post_id){
+        return JobApplication::where('user_id', Auth::user()->id)->where('job_post_id', $job_post_id)->exists();
+    }
+
+    public function company_id(){
+        $company = Company::where('user_id', Auth::id())->first();
+        return $company->id;
+    }
+
+    public static function company_info(){
+        $company = Company::where('user_id', Auth::id())->first();
+        return $company;
+    }
+
+    public static function isRole($role){
+        return optional(Auth::user())->role === $role;
+    }
+
+       public function job_post()
+{
+    return $this->belongsTo(JobPost::class, 'job_post_id');
+}
+
+
 }

@@ -39,7 +39,7 @@ class Industries extends Component
             $query->orderBy('sub_industries_count', 'desc');
         }
 
-        $industries = $query->paginate(2);
+        $industries = $query->paginate(8);
 
         return view('livewire.industries', [
             'industries' => $industries

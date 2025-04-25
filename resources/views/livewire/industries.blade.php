@@ -67,7 +67,7 @@
                 <!-- Category Cards -->
 
                   @foreach ($industries as $industry)                    
-                  <div class="group card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
+                  <div class="group card bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300">
                     <div class="card-body items-center text-center">
                       <div class="mb-4 text-primary">
                         @if(Str::contains($industry->icon, '<svg'))

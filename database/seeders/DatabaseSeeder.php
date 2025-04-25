@@ -15,6 +15,7 @@ use Database\Seeders\JobSkillSeeder;
 use Database\Seeders\SubIndustrySeeder;
 use Database\Seeders\JobEducationSeeder;
 use Database\Seeders\JobPostingDurationSeeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,10 +26,39 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $users = collect([
+            [
+                'name' => 'Shaharyar',
+                'email' => 'ahmedshaharyar00@gmail.com',
+                'password' => '12345678',
+                'role' => 'employer',
+                // 'city_id' => 1
+            ],
+            [
+                'name' => 'Amir',
+                'email' => 'meeramirali99@gmail.com',
+                'password' => '12345678',
+                'role' => 'employer',
+                // 'city_id' => 2
+
+            ],
+            [
+                'name' => 'Sharjeel',
+                'email' => 'shaharyar.devworks@gmail.com',
+                'password' => '12345678',
+                'role' => 'employer',
+                // 'city_id' => 3
+
+            ],
         ]);
+        
+        // DB::table('users')->truncate();
+
+        $users->each(function($user){
+
+            User::factory()->create($user);
+        });
+      
 
         $this->call([
             CitySeeder::class,
@@ -46,5 +76,6 @@ class DatabaseSeeder extends Seeder
             JobEducationSeeder::class,
             JobSkillSeeder::class
         ]);
+
     }
 }
