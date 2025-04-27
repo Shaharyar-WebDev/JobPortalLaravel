@@ -55,4 +55,8 @@ public function job_skills(){
         return $this->belongsTo(JobExperience::class, 'job_experience_id');
     }
 
+    public function job_application(){
+        return $this->belongsToMany(User::class, 'job_applications', 'job_post_id', 'user_id');
+    }
+
 }

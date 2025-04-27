@@ -1,4 +1,4 @@
-export const initChoices = (element, options, dispatchEventName, type = 'select', reset = null) => {
+export const initChoices = (element, options, dispatchEventName, type = 'select', resetBtns = null) => {
  
     if(!element.dataset.choicesInitialized){
   if(element._choicesInstance){
@@ -10,9 +10,11 @@ export const initChoices = (element, options, dispatchEventName, type = 'select'
 
     element.dataset.choicesInitialized = true;
 
-    if(reset){
-      reset.addEventListener('click', (e)=>{
-choices.removeActiveItems();
+    if(resetBtns){
+      resetBtns.forEach(reset => {
+        reset.addEventListener('click', (e)=>{
+  choices.removeActiveItems();
+      });
       });
     }
 

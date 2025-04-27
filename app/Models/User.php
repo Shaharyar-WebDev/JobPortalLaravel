@@ -63,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public static function hasAppliedTo($job_post_id){
-        return JobApplication::where('user_id', Auth::user()->id)->where('job_post_id', $job_post_id)->exists();
+        return optional(JobApplication::where('user_id', Auth::user()->id)->where('job_post_id', $job_post_id))->exists();
     }
 
     public function company_id(){

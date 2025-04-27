@@ -176,7 +176,7 @@ class EmployerSignup extends Component
             'address' => 'required',
             'contact' => 'required|numeric|regex:/^\+92[0-9]{10}$/',
             'company_size' => 'required',
-            'description' => 'required'
+            'description' => 'required|min:10'
         ]);
 
         try{

@@ -4,6 +4,8 @@ const initJobs = () => {
 
 const element = document.querySelectorAll('#custom-educations');
 
+const resetFilters = document.querySelectorAll("#resetFilters");
+
 const element2 = document.querySelectorAll('#custom_skills');
 
 const element3 = document.querySelectorAll('#job_skills');
@@ -16,7 +18,7 @@ element.forEach(el=>{
   initChoices(el, {
     removeItemButton: true,
     placeholderValue: 'Select custom educations...',
-  }, 'customEducationsUpdated');
+  }, 'customEducationsUpdated', 'select', resetFilters);
 
 });
 
@@ -24,21 +26,21 @@ element2.forEach(el2=>{
   initChoices(el2, {
     removeItemButton: true,
     placeholderValue: 'Select custom Skills...',
-  } ,'customSkillsUpdated');
+  } ,'customSkillsUpdated', 'select', resetFilters);
 });
 
 element3.forEach(el3=>{
   initChoices(el3, {
     removeItemButton: true,
     placeholderValue: 'Select Skills...',
-  } ,'SkillsUpdated');
+  } ,'SkillsUpdated', 'select', resetFilters);
 });
 
 element4.forEach(el4=>{
   initChoices(el4, {
     removeItemButton: true,
     placeholderValue: 'Select Company...',
-  } ,'CompanyUpdated');
+  } ,'CompanyUpdated', 'select', resetFilters);
 });
 }
 

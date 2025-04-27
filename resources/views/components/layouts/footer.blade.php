@@ -19,7 +19,7 @@
           <h3 class="footer-title opacity-100 text-primary">Quick Links</h3> 
           <ul class="menu">
             <li><a wire:navigate href="{{route('home')}}" class="link link-hover opacity-70 hover:text-primary">Home</a></li>
-            <li><a wire:navigate href="{{route('jobs')}}" class="link link-hover opacity-70 hover:text-primary">Browse</a></li>
+            <li><a wire:navigate href="{{route('jobs')}}" class="link link-hover opacity-70 hover:text-primary">Browse Jobs</a></li>
             <li><a wire:navigate href="{{route('employer.signup')}}" class="link link-hover opacity-70 hover:text-primary">Employer Signup</a></li>
             <li><a wire:navigate href="{{route('industries')}}" class="link link-hover opacity-70 hover:text-primary">Brose Industries</a></li>
             <li><a wire:navigate href="{{route('companies')}}" class="link link-hover opacity-70 hover:text-primary">Browse Companies</a></li>

@@ -22,7 +22,7 @@ return new class extends Migration
             // $table->text('cover_letter')->nullable()->default(null);
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
-        });
+        }); 
     }
 
     /**

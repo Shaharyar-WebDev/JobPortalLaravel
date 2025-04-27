@@ -22,8 +22,10 @@ use App\Livewire\ManageApplication;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\AdminDashboard;
+use Illuminate\Support\Facades\Artisan;
 use App\Livewire\Employer\EmployerJobsAdd;
 use App\Livewire\Employer\EmployerProfile;
+use App\Http\Controllers\ArtisanController;
 use App\Livewire\Employer\EmployerJobsView;
 use App\Livewire\Employer\EmployerDashboard;
 use App\Livewire\Employer\EmployerManageApplication;
@@ -63,8 +65,6 @@ Route::get('/slug/company/{id}', function($id){
 Route::prefix('/user')->group(function(){
 
     Route::get('/signup', userSignup::class)->name('user.signup')->middleware('guest');
-
-    // Route::get('/verify', userSignup::class)->name('verification.notice');
 
     Route::middleware(['UserRole'])->group(function(){
         
@@ -114,3 +114,12 @@ Route::prefix('/employer')->group(function(){
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 
 Route::get('/logout', Logout::class)->name('logout');
+
+Route::get('/admin/console', function(){
+    return view('livewire.admin.console');
+});
+
+Route::get('/admin/console', [ArtisanController::class, 'commandForm']);
+
+
+Route::post('/admin/console', [ArtisanController::class, 'commandExecute'])->name('exec');

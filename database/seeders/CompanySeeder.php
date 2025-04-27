@@ -114,8 +114,8 @@ class CompanySeeder extends Seeder
             
         ]);
 
-        $companies->each(function($company){
-            Company::create($company);
-        });
+        // $companies->each(function($company){
+        //     Company::create($company);
+        // });
     }
 }

@@ -16,11 +16,11 @@ class JobSkillSeeder extends Seeder
     {
         //
 
-        $job1 = JobPost::find(1);
-        $job2 = JobPost::find(1);
+        // $job1 = JobPost::find(1);
+        // $job2 = JobPost::find(1);
         
-        $job1->job_skills()->sync([1,2,3]);
-        $job2->job_skills()->sync([4,5,6]);
+        // $job1->job_skills()->sync([1,2,3]);
+        // $job2->job_skills()->sync([4,5,6]);
           
     }
 }

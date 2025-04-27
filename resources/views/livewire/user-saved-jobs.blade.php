@@ -23,7 +23,7 @@
             <div class="flex items-start justify-between mb-4">
               <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
               @if($job->company->image && Storage::disk('public')->exists('/images/companies/' . $job->company->image))
-              <img class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
+              <img loading="lazy" class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
               @else
               <div class="text-primary font-bold">
                @php
@@ -33,7 +33,6 @@
         }
                @endphp
                {{$cname}}
-               {{$job->company->image}}
               </div>
               @endif
               </div>
@@ -52,6 +51,8 @@
             @elseif ($job->created_at->gt(now()->subDays(7)))
         <span class="badge badge-primary badge-sm">New</span>
         @endif
+
+        @if(!App\Models\User::isRole('employer'))
            
             @if(count(App\Models\UserSavedJob::where('user_id', Auth::id())->where('job_post_id', $job->id)->get()) <= 0)
              <!-- Save Button -->
@@ -72,6 +73,9 @@
               </button>
 </div>
             @endif
+
+            @endif
+
             </div>
             </div>
         
@@ -106,7 +110,20 @@
                </span>
               @endif
               </div>
-            <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
+           @if(Auth::check())
+
+           @if(App\Models\User::isRole('user'))
+           @if(\App\Models\User::hasAppliedTo($job->id))
+            <div class="card-actions">
+              <button class="btn btn-success disabled flex gap-4 w-full" disabled>
+              Already Applied
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>                                 
+              </button>
+            </div>
+           @else
+           <a wire:navigate href="{{route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])}}">
             <div class="card-actions">
               <button class="btn btn-primary flex gap-4 w-full">
               Apply Now
@@ -116,10 +133,34 @@
               </button>
             </div>
             </a>
+
+
+            @endif
+            @else
+              <div class="card-actions">
+                <button class="btn btn-disabled h-auto flex gap-4 w-full">
+                Employers Can Not Apply!
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>                                       
+                </button>
+              </div>
+              </a>
+            @endif
+           @else
+           <a wire:click="urlStore({{$job->id}})" wire:navigate href="{{route( 'login',['redirect_to'=>route('job.apply', ['id'=>$job->id, 'slug'=>$job->slug])])}}">
+            <div class="card-actions">
+              <button class="btn btn-primary h-auto flex gap-4 w-full">
+              Login To Apply Now
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+              </svg>                    
+              </button>
+            </div>
+            </a>
+           @endif
             </div>
           </div>
-        
-
           @endforeach
         @else
        <!-- Empty State -->

@@ -54,7 +54,8 @@
                                 @endif
                                 <div>
                                     <h2 class="font-semibold text-lg break-words whitespace-normal">
-                                        <a class="hover:underline" wire:navigate href="{{route('company.view', [
+                                        <a class="hover:underline" 
+                                        wire:navigate href="{{route('company.view', [
                       'id'=>$job->company->id,'slug'=>App\Helpers\MyFunc::sexySlug($job->company->name, time : false)])}}">{{$job->company->name}}</a>
                                     </h2>
                                     <div class="text-sm text-base-content/70"><a class="hover:underline" wire:navigate
@@ -346,7 +347,7 @@
                                 <div class="flex items-start justify-between mb-4">
                                   <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
                                   @if($job->company->image && Storage::disk('public')->exists('/images/companies/' . $job->company->image))
-                                  <img class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
+                                  <img loading="lazy" class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
                                   @else
                                   <div class="text-primary font-bold">
                                    @php
@@ -356,7 +357,6 @@
                             }
                                    @endphp
                                    {{$cname}}
-                                   {{$job->company->image}}
                                   </div>
                                   @endif
                                   </div>
@@ -462,7 +462,7 @@
                                 @endif
                                 @else
                                   <div class="card-actions">
-                                    <button class="btn btn-disabled flex gap-4 w-full">
+                                    <button class="btn btn-disabled h-auto flex gap-4 w-full">
                                     Employers Can Not Apply!
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                       <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
@@ -487,7 +487,7 @@
                               </div>
                             
               
-                              @endforeach             
+                              @endforeach     
                         </div>
                     </div>
 

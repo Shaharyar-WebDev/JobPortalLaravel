@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html style="scroll-behavior: smooth" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html style="scroll-behavior: smooth" lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="corporate">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ $title ?? 'JobPortal - Find Your Dream Job' }}</title>
+  <title>{{ $title ?? 'Linkdeed JobPortal - Find Your Dream Job' }}</title>
   @include('components.layouts.scripts')
 </head>
 

@@ -88,7 +88,7 @@ class UserSignup extends Component
         $this->validate([
             'phone_number' => 'required|numeric|regex:/^\+92[0-9]{10}$/',
             'gender' => 'required',
-            'github' => 'nullable|regex:~^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9-]{1,39}\/?$~',
+            'github' => 'nullable|regex:~^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9-]+(\/[a-zA-Z0-9._-]+)?\/?$~',
             'linkedin' => 'nullable|regex:~^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z-]{3,100}\/?$~'
         ]);
 

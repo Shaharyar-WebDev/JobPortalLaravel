@@ -59,16 +59,7 @@
                 @enderror
             </div>
     
-            <!-- Remember & Forgot -->
-            <div class="flex justify-center items-center">
-                <label class="flex items-center gap-2 cursor-pointer">
-                    {{-- <input type="checkbox" wire:model="remember" 
-                           class="checkbox checkbox-primary checkbox-sm">
-                    <span class="label-text">Remember me</span> --}}
-                </label>
-                <a href="#" class="link link-primary text-sm">Forgot password?</a>
-            </div>
-    
+            <div class="divider"></div>
             <!-- Submit Button -->
             <button type="submit" wire:loading.attr="disabled" 
                     class="btn btn-primary w-full mt-6">

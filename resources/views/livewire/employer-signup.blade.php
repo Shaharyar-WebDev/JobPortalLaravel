@@ -230,12 +230,12 @@
                             <span class="label-text">Verification Code</span>
                         </label>
                         <div class="flex justify-center gap-2 mb-3">
-                            <input multiple wire:model.blur="otp.0" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.1" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.2" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.3" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.4" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.5" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input multiple wire:model.live="otp.0" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.1" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.2" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.3" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.4" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.5" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
                         </div>  
                         <label class="label text-center flex justify-center items-center"> 
                        @error('otp')

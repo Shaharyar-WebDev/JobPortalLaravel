@@ -183,9 +183,9 @@ Submit your resume, portfolio, or GitHub link.',
 
         ]);
 
-        $job_posts->each(function($job_post){
-            JobPost::create($job_post);
-        });
+        // $job_posts->each(function($job_post){
+        //     JobPost::create($job_post);
+        // });
 
     }
 }

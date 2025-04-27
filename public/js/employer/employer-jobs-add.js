@@ -7,7 +7,7 @@ const initEmployerAddJobs = () => {
 
     const skills = document.querySelector('#skills');
 
-    const resetRequirements = document.querySelector("#resetRequirements");
+    const resetRequirements = document.querySelectorAll("#resetRequirements");
 
     const custom_skills = document.querySelector('#custom_skills');
 

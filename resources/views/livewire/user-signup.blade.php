@@ -233,12 +233,12 @@
                             <span class="label-text">Verification Code</span>
                         </label>
                         <div class="flex justify-center gap-2 mb-3">
-                            <input multiple wire:model.blur="otp.0" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.1" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.2" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.3" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.4" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
-                            <input wire:model.blur="otp.5" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input multiple wire:model.live="otp.0" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.1" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.2" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.3" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.4" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
+                            <input wire:model.live="otp.5" type="text" maxlength="1" class="otp-input input input-bordered input-primary w-12 text-center" pattern="\d">
                         </div>  
                         <label class="label text-center flex justify-center items-center"> 
                        @error('otp')
@@ -472,7 +472,7 @@
                 <div class="flex flex-col gap-4">
                     <a wire:navigate href="{{route('user.profile')}}">
                     <button class="btn btn-success gap-2 px-8 transition-all h-auto">
-                        Go to Dashboard
+                        Go to Profile
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                         </svg>

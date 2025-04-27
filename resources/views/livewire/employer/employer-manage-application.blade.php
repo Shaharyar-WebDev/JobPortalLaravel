@@ -79,7 +79,7 @@
                                 {{$job->id}}
                             </td>
                             <td>
-                                <div class="flex flex-col xl:flex-row items-center gap-3">
+                                <div class="flex flex-col 2xl:flex-row items-center gap-3">
                                         @if($job->user->image && Storage::disk('public')->exists('/images/users/'.$job->user->image))
                                         <img class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center object-cover" src="{{asset('storage')}}/images/users/{{$job->user->image}}">
                                         @else

@@ -32,7 +32,7 @@ class UserProfile extends Component
             'name' => 'required|min:3',
             'phone_number' => 'nullable|numeric|regex:/^\+92[0-9]{10}$/',
             'gender' => 'nullable',
-            'github' => 'nullable|regex:~^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9-]{1,39}\/?$~',
+            'github' => 'nullable|regex:~^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9-]+(\/[a-zA-Z0-9._-]+)?\/?$~',
             'linkedin' => 'nullable|regex:~^(https?:\/\/)?(www\.)?linkedin\.com\/in\/[a-zA-Z-]{3,100}\/?$~'
         ]);
 

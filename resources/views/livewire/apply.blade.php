@@ -29,7 +29,7 @@
                         </img>
                         @else
                         <div class="w-12 h-12 rounded-box bg-primary/10 flex items-center justify-center">
-                          <span class="text-2xl font-bold text-primary">  
+                          <span class="font-bold text-primary">  
                            
                           @php
                           $name = explode(' ',$job->company->name);
@@ -45,8 +45,9 @@
                         @endif
                         <div>                  
                             <h2 class="font-semibold text-lg">
-                                <a class="text-primary
-                                 hover:underline" wire:navigate href="">{{$job->company->name}}</a>
+                                <a class="text-primary hover:underline" 
+                                        wire:navigate href="{{route('company.view', [
+                      'id'=>$job->company->id,'slug'=>App\Helpers\MyFunc::sexySlug($job->company->name, time : false)])}}">{{$job->company->name}}</a>
                             </h2>
                             <div class="text-sm text-base-content/70"><a class="hover:underline" wire:navigate
                                     href="{{route('jobs', ['industry' => $job->industry->id])}}">{{$job->company->industry->name}}</a>
@@ -141,7 +142,7 @@
                                         </svg>
                                         @endif
                                         @if($resume_name)
-                                        <p class="pt-1 text-sm">{{$resume_name}}
+                                        <p class="pt-1 text-sm break-words whitespace-normal text-center max-w-full">{{$resume_name}}
                                         </p>
                                         <p class="pt-1 text-sm">click to Change</p>
                                         @else
@@ -152,7 +153,7 @@
                                     {{-- @endif --}}
                                     <input type="file" wire:model.live.debounce.500ms="resume" class="opacity-0" accept=".pdf,.doc,.docx">
                                     @error('resume_name')
-                                    <span class="text-center text-error mb-2">
+                                    <span class="text-center text-error mb-2 break-words whitespace-normal  max-w-full">
                                         {{$message}}
                                     </span>
                                     @enderror

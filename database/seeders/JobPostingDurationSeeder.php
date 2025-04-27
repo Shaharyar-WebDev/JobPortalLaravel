@@ -14,15 +14,15 @@ class JobPostingDurationSeeder extends Seeder
     public function run(): void
     {
         //
-        $postings = collect([
-            ['duration' => 7],
-            ['duration' => 15],
-            ['duration' => 30]
-        ]);
+        // $postings = collect([
+        //     ['duration' => 7],
+        //     ['duration' => 15],
+        //     ['duration' => 30]
+        // ]);
 
-        $postings->each(function($posting){
-            JobPostingDuration::create($posting);
-        });
+        // $postings->each(function($posting){
+        //     JobPostingDuration::create($posting);
+        // });
 
 
     }

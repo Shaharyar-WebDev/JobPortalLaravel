@@ -54,6 +54,8 @@ public function updatedResume(){
 
   public function apply(){
 
+    if(Auth::check()){
+        
     if(User::hasAppliedTo($this->id)){
             
         $this->redirectIntended(route('home'), navigate:true);
@@ -92,13 +94,17 @@ public function updatedResume(){
 
     $this->redirect(route('home'), navigate:true);
 
-    flash('response', ['status'=>'success', 'message'=>' <h3 class="font-bold">Application Submitted!</h3>
+    flash('response', ['status'=>'success', 'message'=>'<h3 class="font-bold">Application Submitted!</h3>
         <div class="text-xs">We have received your application. Our team will review it and get back to you soon.</div>']);
 
 }catch(Exception $error){
     flash('response', ['status'=>'error', 'message'=>'An Error Occured While Submitting Application']);
 }
     }
+}else{
+    $this->redirectIntended(route('home'), navigate:true);
+    flash('response', ['status'=>'info', 'message' => 'Please Login First']);
+};
   }
 
     public function render()
@@ -109,11 +115,16 @@ public function updatedResume(){
             flash('response', ['status'=>'info', 'message' => 'Employers Cannot Apply']);
         }
 
+        if(Auth::check()){
         if(User:: hasAppliedTo($this->id)){
             
             $this->redirectIntended(route('home'), navigate:true);
             flash('response', ['status'=>'info', 'message' => 'Already Applied']);
         };
+    }else{
+        $this->redirectIntended(route('home'), navigate:true);
+        flash('response', ['status'=>'info', 'message' => 'Please Login First']);
+    };
 
         $job = MyFunc::checkSlug(JobPost::class, $this->id, $this->slug, 404);
         

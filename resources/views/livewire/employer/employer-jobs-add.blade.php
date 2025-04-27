@@ -1,7 +1,7 @@
 <div class="md:p-4">
     <!-- Care about people's approval and you will be their prisoner. -->
     <!-- Dashboard Main -->
-    <div class="text-sm breadcrumbs mb-2">
+    <div class="p-4 text-sm breadcrumbs mb-2">
         <ul>
             <li><a wire:navigate href="http://127.0.0.1:8000/employer/dashboard">Dashboard</a></li>
             <li><a wire:navigate href="http://127.0.0.1:8000/employer/dashboard/jobs/view">Jobs</a></li> 
@@ -50,14 +50,14 @@
                                 <span class="label-text">Job Type*</span>
                             </label>
                             <select wire:model.live.debounce.500ms="job_type_id" class="select select-bordered">
-                                Select Job Type
+                                <option class="hidden">Select Job Type</option>
                                 @forelse ($job_types as $job_type)
                                     <option value="{{$job_type->id}}">{{$job_type->name}}</option>
                                 @empty
                                     <option disabled>No job Types</option>
                                 @endforelse
                             </select>
-                            @error('job_type')
+                            @error('job_type_id')
                                 <span class="text-error mt-2">
                                     {{$message}}
                                 </span>
@@ -163,6 +163,7 @@
                             </label>
                             <select class="select select-bordered" wire:model.live.debounce.500ms="sub_industry_id">
                                 @if ($sub_industries)
+                                <option class="hidden">Select Sub Industry</option>
                                     @forelse ($sub_industries as $sub_industry)
                                         <option value="{{$sub_industry->id}}">{{$sub_industry->name}}</option>
                                     @empty

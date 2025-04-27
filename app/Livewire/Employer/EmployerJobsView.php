@@ -52,7 +52,7 @@ class EmployerJobsView extends Component
         $job_types = JobType::all();
 
         $company = Company::where('user_id', Auth::id())->first();
-        $query = JobPost::with('job_type', 'city', 'city_area', 'industry')->where('company_id', $company->id);
+        $query = JobPost::with('job_type', 'city', 'city_area', 'industry','job_application')->where('company_id', $company->id);
 
         if($this->search){
             $query->where('title', 'like', '%'.trim($this->search).'%');
@@ -75,7 +75,7 @@ class EmployerJobsView extends Component
     return view('livewire.employer.employer-jobs-view', [
             'jobs' => $jobs,
             'industries' => $industries,
-            'job_types' => $job_types
+            'job_types' => $job_types,
         ]);
     }
 }

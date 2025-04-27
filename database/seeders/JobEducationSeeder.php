@@ -16,11 +16,11 @@ class JobEducationSeeder extends Seeder
     {
         //
 
-        $job1 = JobPost::find(1);
-        $job2 = JobPost::find(2);
+        // $job1 = JobPost::find(1);
+        // $job2 = JobPost::find(2);
 
-        $job1->job_educations()->sync([1,2,3]);
-        $job2->job_educations()->sync([4,5,6]);
+        // $job1->job_educations()->sync([1,2,3]);
+        // $job2->job_educations()->sync([4,5,6]);
 
         // $job_educations->each(function($job_education){
         //     JobEducation::create($job_education);

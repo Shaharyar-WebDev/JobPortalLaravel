@@ -270,7 +270,7 @@ class Jobs extends Component
         }
 
         // $jobs = JobPost::with(['company','job_type','city','city_area'])->get();
-        $jobs = $query->paginate(5);
+        $jobs = $query->paginate(12);
 
         // dd($query->whereHas('company' ,function($query){
         //     $query->where('job_posts_visibility', '!=','hidden');

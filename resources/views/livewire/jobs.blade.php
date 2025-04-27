@@ -12,7 +12,7 @@
         <div class="w-64 space-y-6">
           <div class="card bg-base-200 shadow-sm">
               <div class="card-body">
-                <button type="button" wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto mb-2  min-w-40 flex justify-center items-center gap-2">
+                <button type="button" id="resetFilters" wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto mb-2  min-w-40 flex justify-center items-center gap-2">
                   Reset Filters
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -160,6 +160,15 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
                   </div>
 
                   <div class="divider"></div>
+
+                  <button type="button" id="resetFilters"  wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto  min-w-40 flex justify-center items-center gap-2">
+                    Reset Filters
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    
+                  </button>
+
               </div>
           </div>
       </div>
@@ -316,7 +325,7 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
 
                 <!-- Reset Button -->
                 <div class="w-full md:w-auto">
-                  <button type="button" wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto  min-w-40 flex justify-center items-center gap-2">
+                  <button type="button" id="resetFilters"  wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto  min-w-40 flex justify-center items-center gap-2">
                     Reset Filters
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
@@ -458,6 +467,15 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
                     </div>
 
                     <div class="divider"></div>
+
+                    <button type="button" id="resetFilters"  wire:click="resetFilters" class="md:mt-5 btn btn-primary btn-md w-full md:auto  min-w-40 flex justify-center items-center gap-2">
+                      Reset Filters
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-6 w-6" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                      </svg>
+                      
+                    </button>
+
                 </div>
             </div>
         </div>
@@ -473,7 +491,7 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
                   <div class="flex items-start justify-between mb-4">
                     <div class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center">
                     @if($job->company->image && Storage::disk('public')->exists('/images/companies/' . $job->company->image))
-                    <img class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
+                    <img loading="lazy" class="w-12 h-12 overflow-hidden object-cover rounded-box bg-primary/10 flex items-center justify-center" src="{{asset('storage/images/companies/' . $job->company->image)}}" alt="">
                     @else
                     <div class="text-primary font-bold">
                      @php
@@ -483,7 +501,6 @@ $custom_skills = \App\Models\JobPost::pluck('custom_skills')->flatten()->filter(
               }
                      @endphp
                      {{$cname}}
-                     {{$job->company->image}}
                     </div>
                     @endif
                     </div>

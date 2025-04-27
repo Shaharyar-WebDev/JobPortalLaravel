@@ -24,7 +24,7 @@
     <!-- Sidebar -->
     <div class="drawer-side">
         <label for="my-drawer-2" class="drawer-overlay"></label>
-        <aside class="w-80 min-h-screen bg-base-200 p-4">
+        <aside class="pt-20 md:pt-4 w-80 min-h-screen bg-base-200 p-4">
             <div class="flex items-center gap-4 mb-8">
                 <div class="avatar">
                     <div class="w-10 flex justify-center items-center rounded-full bg-primary/10 ring ring-primary/20">
@@ -57,9 +57,9 @@
                         @endif
                     </div>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold">{{Auth::user()->name}}</h2>
-                    <p class="text-sm">{{ucfirst(Auth::user()->role)}}</p>
+                <div class="min-w-0"> 
+                    <h2 class="text-xl font-bold break-words whitespace-normal mb-2">{{Auth::user()->name}}</h2>
+                    <p class="text-sm break-words whitespace-normal">{{ucfirst(Auth::user()->role)}}</p>
                 </div>
             </div>
 
@@ -120,7 +120,7 @@
     <!-- Sidebar -->
     <div class="drawer-side">
         <label for="my-drawer-2" class="drawer-overlay"></label>
-        <aside class="w-80 min-h-screen bg-base-200 p-4">
+        <aside class="pt-20 lg:pt-4 w-80 min-h-screen bg-base-200 p-4">
             <div class="flex items-center gap-4 mb-8">
                 <div class="avatar">
                     <div class="w-10 flex justify-center items-center rounded-full bg-primary/10 ring ring-primary/20">
@@ -153,9 +153,9 @@
                         @endif
                     </div>
                 </div>
-                <div>
-                    <h2 class="text-xl font-bold">{{Auth::user()->name}}</h2>
-                    <p class="text-sm">{{ucfirst(Auth::user()->role)}}</p>
+                <div class="min-w-0">
+                    <h2 class="text-xl font-bold break-words whitespace-normal mb-2">{{Auth::user()->name}}</h2>
+                    <p class="text-sm break-words whitespace-normal">{{ucfirst(Auth::user()->role)}}</p>
                 </div>
             </div>
 

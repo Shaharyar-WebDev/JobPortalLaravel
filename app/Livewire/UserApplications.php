@@ -22,7 +22,7 @@ class UserApplications extends Component
     #[On('deleteApplication')]
     public function deleteApplication($id){
         Auth::user()->applications()->detach($id);
-        flash('response', ['status'=>'success', 'message'=>'Deleted Successfully']);
+        flash('response', ['status'=>'success', 'message'=>'Application Withdrawed Successfully']);
     }
 
     public $perPage = 5;

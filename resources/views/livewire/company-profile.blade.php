@@ -336,7 +336,6 @@
               }
                      @endphp
                      {{$cname}}
-                     {{$job->company->image}}
                     </div>
                     @endif
                     </div>

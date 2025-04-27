@@ -134,35 +134,35 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
        <!-- Category Card 1 -->
 
-    @foreach ($industries as $industry)                    
-    <div class="group card bg-base-200 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div class="card-body items-center text-center">
-        <div class="mb-4 text-primary">
-          @if(Str::contains($industry->icon, '<svg'))
-          {!!$industry->icon!!}
-          @endif
-        </div>
-        <h3 class="card-title mb-2">{{$industry->name}}</h3>
-        <div class="flex flex-wrap justify-center items-center gap-2 text-md font-semibold text-base-content/70">
-          <span>{{$industry->job_posts_count}}+ Open {{Str::plural('Job', $industry->job_posts_count)}}</span>
-          <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
-          <span>{{$industry->companies_count}}+  {{Str::plural('Company', $industry->companies_count)}}</span>
-          <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
-          <span>{{$industry->sub_industries_count}} Sub-{{Str::plural('Industry', $industry->sub_industries_count)}}</span>
-        </div>
-        <div class="mt-3 group-hover:opacity-100 transition-opacity duration-300">
-          <a wire:navigate href="{{route('jobs',['industry'=>$industry->id])}}">
-          <button class="btn btn-link btn-xs text-primary p-0 hover:no-underline">
-            Explore Opportunities
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
-              <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
-            </svg>
-          </button>
-        </a>
-        </div>
-      </div>
-    </div>
-    @endforeach
+       @foreach ($industries as $industry)                    
+       <div class="group card bg-base-200 shadow-md hover:shadow-xl transition-shadow duration-300">
+         <div class="card-body items-center text-center">
+           <div class="mb-4 text-primary">
+             @if(Str::contains($industry->icon, '<svg'))
+             {!!$industry->icon!!}
+             @endif
+           </div>
+           <h3 class="card-title mb-2">{{$industry->name}}</h3>
+           <div class="flex flex-wrap justify-center items-center gap-2 text-md font-semibold text-base-content/70">
+             <span>{{$industry->job_posts_count}}+ Open {{Str::plural('Job', $industry->job_posts_count)}}</span>
+             <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
+             <span>{{$industry->companies_count}}+  {{Str::plural('Company', $industry->companies_count)}}</span>
+             <div class="w-1 h-1 rounded-full bg-base-content/30"></div>
+             <span>{{$industry->sub_industries_count}} Sub-{{Str::plural('Industry', $industry->sub_industries_count)}}</span>
+           </div>
+           <div class="mt-3 group-hover:opacity-100 transition-opacity duration-300">
+             <a wire:navigate href="{{route('jobs',['industry'=>$industry->id])}}">
+             <button class="btn btn-link btn-xs text-primary p-0 hover:no-underline">
+               Explore Opportunities
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
+                 <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"></path>
+               </svg>
+             </button>
+           </a>
+           </div>
+         </div>
+       </div>
+       @endforeach
   </div>
 
   <!-- View All Button -->
@@ -212,7 +212,6 @@
     }
            @endphp
            {{$cname}}
-           {{$job->company->image}}
           </div>
           @endif
           </div>

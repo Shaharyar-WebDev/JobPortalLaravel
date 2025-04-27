@@ -80,7 +80,7 @@ class Home extends Component
         $cities = City::all();
         
         $industries = Industry::with('job_posts')
-            ->withCount('job_posts')
+        ->withCount(['companies','sub_industries','job_posts'])
             ->orderBy('job_posts_count', 'desc')
             ->limit(4)
             ->get();

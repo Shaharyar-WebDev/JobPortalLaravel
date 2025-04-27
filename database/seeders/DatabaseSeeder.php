@@ -54,10 +54,10 @@ class DatabaseSeeder extends Seeder
         
         // DB::table('users')->truncate();
 
-        $users->each(function($user){
+        // $users->each(function($user){
 
-            User::factory()->create($user);
-        });
+        //     User::factory()->create($user);
+        // });
       
 
         $this->call([
